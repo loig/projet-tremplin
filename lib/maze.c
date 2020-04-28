@@ -4,7 +4,7 @@
  * \brief library maze.
  * \author Albert.G, Simon.P, Alexis.G
  * \date 17 fevrier 2020
- * 
+ *
  * library containing methods necessary to generate a playable labyrinth
  */
 
@@ -22,7 +22,7 @@ Coordonnes end;
 int speed = 25000;
 
 /**
- * \brief function to know the size of a map 
+ * \brief function to know the size of a map
 */
 void size_map_lab() {
 
@@ -148,13 +148,13 @@ void load_map_lab() {
 bool there_is_a_wall(Coordonnes coordinates, bool take_bound) {
 
   if (take_bound) {
-    return coordinates.x < 0 
+    return coordinates.x < 0
     || coordinates.y < 0
     || lab.sizeX <= coordinates.x
     || lab.sizeY <= coordinates.y
     || lab.map[coordinates.y][coordinates.x];
   }
-  
+
   else {
     return coordinates.x >= 0
     && coordinates.y >= 0
@@ -186,13 +186,13 @@ Coordonnes* generate_adjacent_square(Coordonnes adjacentSquare[8], Coordonnes ac
   adjacentSquare[6] = bottom_left;
   Coordonnes left = {actualSquare.x-1,actualSquare.y};
   adjacentSquare[7] = left;
-  
+
   return adjacentSquare;
 }
 
 /**
 * \brief use to know how many cell available around a cell.
-* \param coordinates the current coordinate 
+* \param coordinates the current coordinate
 * \param array the list of available cell around the coordinates
 * \return numbers of available cell. (those who are not a wall)
 */
@@ -257,7 +257,7 @@ void roots_set_by_probability(SetQueue* setqueue) {
       Coordonnes adjacentSquare[8];
       generate_adjacent_square(adjacentSquare, racine);
 
-      if (there_is_a_wall(racine,true)) 
+      if (there_is_a_wall(racine,true))
         valide = false;
 
       int nbWall = 0;
@@ -266,7 +266,7 @@ void roots_set_by_probability(SetQueue* setqueue) {
         if (there_is_a_wall(adjacentSquare[j],false)) {
 
           nbWall++;
-          if (nbWall > 0) 
+          if (nbWall > 0)
             valide = false;
         }
       }
@@ -292,14 +292,14 @@ void roots_set_by_side(SetQueue* setqueue) {
     setqueue_add_coor(setqueue,racine);
     lab.map[racine.y][racine.x] = 1;
   }
-  
+
   for (int i = rand()%7; i >= 0;i--) {
     racine.x = rand() % lab.sizeX;
     racine.y = 0;
     setqueue_add_coor(setqueue,racine);
     lab.map[racine.y][racine.x] = 1;
   }
-  
+
   for (int i = rand()%5; i >= 0;i--) {
     racine.x = lab.sizeX-1;
     racine.y = rand() % lab.sizeY;
@@ -337,7 +337,7 @@ void grow_maze(SetQueue* setqueue) {
     for (int i = 0; i < 8; i++) {
       if (there_is_a_wall(adjacentSquare[i],true)) {
         nbWall++;
-        if (nbWall > 3) 
+        if (nbWall > 3)
           valide = false;
       }
     }
@@ -388,7 +388,7 @@ void generate_map_lab(int mode) {
     break;
   case 2 :
     rand_gen();
-    
+
 
   }
 
@@ -405,7 +405,7 @@ void rand_gen(){
     {
       lab.map[i][j] = false;
     }
-    
+
   }
   int randX;
   int randY;
@@ -413,13 +413,13 @@ void rand_gen(){
   {
     randY = rand() % lab.sizeY;
     randX = rand() % lab.sizeX;
-    if (lab.map[randY][randX] == false) lab.map[randY][randX] = true; 
+    if (lab.map[randY][randX] == false) lab.map[randY][randX] = true;
   }
 }
 
 
 /**
-* \brief set the start on the specific coordinates on the map. 
+* \brief set the start on the specific coordinates on the map.
 *        If set on a wall or an arrival, exit the program.
 * \param start, the entry coordinates to set.
 */
@@ -429,7 +429,7 @@ void set_start_lab(Coordonnes start) {
 }
 
 /**
-* \brief set the arrival on the specific coordinates on the map. 
+* \brief set the arrival on the specific coordinates on the map.
 *        If set on a wall or a start, exit the program.
 * \param arrival, the exit coordinates to set.
 */
@@ -469,7 +469,7 @@ bool is_solvable() {
     }
   } while (!(setqueue_is_empty(setqueue) || found));
   setqueue_free(setqueue);
-  //setqueue_free(coordinates_pass); this function create display's problems of coordinates 
+  //setqueue_free(coordinates_pass); this function create display's problems of coordinates
   return found;
 }
 
@@ -504,15 +504,17 @@ void cooldown(int temps){
 */
 void maze_initialization() {
 
-  //calculate the map size
-  size_map_lab();
+
 
   //Load labyrinth
   if (parameters.generation && parameters.contest == false) {
-    lab.sizeX = 28;
-    lab.sizeY = 28;
+    lab.sizeX = parameters.genSizeX;
+    lab.sizeY = parameters.genSizeY;
     generate_map_lab(parameters.generation);
   } else {
+    //calculate the map size
+    size_map_lab();
+    //load the map
     load_map_lab();
   }
 

@@ -33,7 +33,7 @@
 #define CASE_ARRIVE 4
 #define CASE_DEPART 5
 #define CASE_NOIR 6
-#define PORT 8080 
+#define PORT 8080
 
 char int_to_hexa(int to_convert){
   switch (to_convert){
@@ -99,9 +99,9 @@ void get_maze_hash(char hash[100]){
 void submit(bool solvable){
   endwin();
   const char* json_model = "{\"student\": \"%s\", \"solve\": %d, \"count\": %d, \"status\": %d, \"orientateR\": %d, \"orientateL\": %d, \"time\": %f}\n";
-  int sock = 0; 
+  int sock = 0;
   struct sockaddr_in serv_addr;
-  
+
   char message[1024];
   char buffer[1024] = {0};
   int flag = 1;
@@ -131,15 +131,15 @@ void submit(bool solvable){
 
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(PORT);
-  
-  // Convert IPv4 and IPv6 addresses from text to binary form 
+
+  // Convert IPv4 and IPv6 addresses from text to binary form
   if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0){
-    printf("\nInvalid address / Address not supported \n"); 
-    return; 
+    printf("\nInvalid address / Address not supported \n");
+    return;
   }
 
-  if (connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0){ 
-    printf("\nConnection Failed \n"); 
+  if (connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0){
+    printf("\nConnection Failed \n");
     return;
   }
 
@@ -156,7 +156,7 @@ void submit(bool solvable){
     recv(sock, buffer, sizeof(buffer)-1, 0);
   }
   strcpy(hash, buffer);
-  
+
 
   switch (flag){
   case 0:
@@ -195,6 +195,8 @@ void analyseOption(int argc, char *argv[]) {
                                         {"arrival-random",    no_argument, 0,  'x' }, //arrival set
                                         {"start",    required_argument, 0,  'y' }, //start set
                                         {"arrival",    required_argument, 0,  'z' }, //arrival set
+                                        {"xsize", required_argument, 0, 'i'}, //size in x for gen
+                                        {"ysize", required_argument, 0, 'j'}, //size in y for gen
                                         {0,         0,                 0,  0 }
   };
 
@@ -203,11 +205,13 @@ void analyseOption(int argc, char *argv[]) {
   parameters.display = 0; //display
   parameters.resolution = 0; //resolution
   parameters.generation = 0; //generation
+  parameters.genSizeX = 12; // width of the generated maze
+  parameters.genSizeY = 12; // height of the generated maze
   parameters.verbose = 0; //verbose
   parameters.speed = 0; //speed
   parameters.contest = false; //contest mode
-  parameters.start.x = -1; //start 
-  parameters.start.y = -1; //start 
+  parameters.start.x = -1; //start
+  parameters.start.y = -1; //start
   parameters.arrival.x = -1; //arrivalY
   parameters.arrival.y = -1; //arrivalY
   parameters.randomStart = false; //random start mode
@@ -267,6 +271,24 @@ void analyseOption(int argc, char *argv[]) {
       parameters.generation = val;
       break;
 
+      case 'i': //generation X size
+      val = (int)strtol(optarg,&end,10);
+      if (strcmp(end,"")) {
+        printf("Incorrect syntax\n");
+        exit(0);
+      }
+      parameters.genSizeX = val;
+      break;
+
+      case 'j': //generation Y size
+      val = (int)strtol(optarg,&end,10);
+      if (strcmp(end,"")) {
+        printf("Incorrect syntax\n");
+        exit(0);
+      }
+      parameters.genSizeY = val;
+      break;
+
     case 'h'://help
       printf(""
       "Usage : ./ProjetTremplin [option...] [labPath]\n"
@@ -282,15 +304,20 @@ void analyseOption(int argc, char *argv[]) {
         "\t2 : personnal algorithm\n"
         "\t9 : keyboard resolution\n"
         "\n"
-      "-g generate : generate random maze\n"
+      "-g mode : generate random maze\n"
         "\t1 : generate maze with roots\n"
         "\t1 : generate maze completely randomly\n"
+        "\n"
+        "--xsize x : defines the size of the maze to generate\n"
+        "\n"
+        "--ysize y : defines the size of the mawe to generate\n"
         "\n"
       "--speed step : change speed execution\n"
         "\t0 : no time between move\n"
         "\t1 : 10ms time between move\n"
         "\t2 : 100ms time between move\n"
-        "\tother : 25ms time between move (default)\n"
+        "\t3 : 25ms time between move (default)\n"
+        "\tS : Sms time between move\n"
         "\n"
       "--start Coordinates (x,y) : change start coordinate\n"
       "\n"
@@ -321,8 +348,11 @@ void analyseOption(int argc, char *argv[]) {
       case 2:
         parameters.speed = 100000;
         break;
-      default:
+      case 3:
         parameters.speed = 25000;
+        break;
+      default:
+        parameters.speed = val * 1000;
         break;
       }
       break;
@@ -349,7 +379,7 @@ void analyseOption(int argc, char *argv[]) {
         exit(0);
       }
       parameters.start.x = val;
-      //recovery of the first value
+      //recovery of the second value
       val = (int)strtol(&(end[1]),&end,10);
       if (end[0] != '\0') {
         printf("Incorrect syntax\n");
@@ -366,7 +396,7 @@ void analyseOption(int argc, char *argv[]) {
       exit(0);
     }
     parameters.arrival.x = val;
-    //recovery of the first value
+    //recovery of the second value
     val = (int)strtol(&(end[1]),&end,10);
     if (end[0] != '\0') {
       printf("Incorrect syntax\n");
@@ -379,7 +409,7 @@ void analyseOption(int argc, char *argv[]) {
 }
 
 /**
-* \brief allow the user to solve the maze with the keybord 
+* \brief allow the user to solve the maze with the keybord
 * \param window windows is the window where the modification will be made
 */
 void keyboard_solve(WINDOW* window){
@@ -506,9 +536,9 @@ void comparaison(){
 
 /**
 * \brief initialize the maze, the player, the display, and run the resolution
-* initialize the maze 
+* initialize the maze
 * initialize the player
-* initialize the display 
+* initialize the display
 * run the resolution of the maze
 * active the scroll of the historic
 * close the display
