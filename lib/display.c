@@ -1,7 +1,7 @@
 /**
  *
  * \file display.c
- * \brief Display contain all the functions necessary to initialize and update 
+ * \brief Display contain all the functions necessary to initialize and update
  * a labyrinth using Ncurses.
  * \author Albert.G, Simon.P, Alexis.G
  * \version 1.0
@@ -77,17 +77,17 @@ void display_legende(int xDebutLegende, int yDebutLegende){
   printw("Arrival box");
 }
 
-bool default_view_square(Coordonnes actual_square){ 
+bool default_view_square(Coordonnes actual_square){
   int tmp = actual_square.x;
   tmp++;
   return true;
 }
 
 bool minimalist_view_square(Coordonnes actual_square){
-  Coordonnes adjacent_square[8]; 
+  Coordonnes adjacent_square[8];
   generate_adjacent_square(adjacent_square, player.coordinates);
-  
-  return ((actual_square.x == adjacent_square[player.orientation*2+1].x 
+
+  return ((actual_square.x == adjacent_square[player.orientation*2+1].x
   && actual_square.y == adjacent_square[player.orientation*2+1].y)
   || (actual_square.x == player.coordinates.x
   && actual_square.y == player.coordinates.y));
@@ -136,99 +136,130 @@ bool footstep_view_square(Coordonnes actual_square){
 
 bool line_of_sight_view_square(Coordonnes actual_square){
 
-  if (player.orientation == 0 && actual_square.y > player.coordinates.y)
-    return false;
-  
-  if (player.orientation == 1 && actual_square.x < player.coordinates.x)
-    return false;
+  // always display the player
+  if (player.coordinates.x == actual_square.x &&
+      player.coordinates.y == actual_square.y)
+    return true;
 
-  if (player.orientation == 2 && actual_square.y < player.coordinates.y)
-    return false;
-
-  if (player.orientation == 3 && actual_square.x > player.coordinates.x)
-    return false;
-
-  float x1,y1,x2,y2,m,p;
-
-  if (actual_square.x<player.coordinates.x) {
-
-    x1 = (float)actual_square.x;
-    y1 = (float)actual_square.y;
-
-    x2 = (float)player.coordinates.x;
-    y2 = (float)player.coordinates.y;
-
-  } else if (player.coordinates.x<actual_square.x) {
-
-    x1 = (float)player.coordinates.x;
-    y1 = (float)player.coordinates.y;
-
-    x2 = (float)actual_square.x;
-    y2 = (float)actual_square.y;
-
+  // We try to go from the player to the actual_square in a line as straight
+  // as possible and check that there is no wall on this line (if several lines
+  // are equivalent it is sufficient that there is no wall on one of them to
+  // consider that the player can see actual_square)
+  int currentX = player.coordinates.x;
+  int currentY = player.coordinates.y;
+  if (currentX <= actual_square.x) {
+    if (currentY <= actual_square.y) {
+      int diffX = actual_square.x - currentX;
+      int diffY = actual_square.y - currentY;
+      while (diffX != 0 || diffY != 0) {
+        Coordonnes toLook = {currentX, currentY};
+        if (there_is_a_wall(toLook, true)) {
+          return false;
+        }
+        if (diffX == diffY) {
+          Coordonnes toLooka = {currentX + 1, currentY};
+          Coordonnes toLookb = {currentX, currentY + 1};
+          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
+            return false;
+          }
+          currentX++;
+          currentY++;
+        } else if (diffX < diffY) {
+          currentY++;
+        } else {
+          currentX++;
+        }
+        diffX = actual_square.x - currentX;
+        diffY = actual_square.y - currentY;
+      }
+      return true;
+    } else {
+      int diffX = actual_square.x - currentX;
+      int diffY = currentY - actual_square.y;
+      while (diffX != 0 || diffY != 0) {
+        Coordonnes toLook = {currentX, currentY};
+        if (there_is_a_wall(toLook, true)) {
+          return false;
+        }
+        if (diffX == diffY) {
+          Coordonnes toLooka = {currentX + 1, currentY};
+          Coordonnes toLookb = {currentX, currentY - 1};
+          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
+            return false;
+          }
+          currentX++;
+          currentY--;
+        } else if (diffX < diffY) {
+          currentY--;
+        } else {
+          currentX++;
+        }
+        diffX = actual_square.x - currentX;
+        diffY = currentY - actual_square.y;
+      }
+      return true;
+    }
   } else {
-    x1 = (float)player.coordinates.x;
-    y1 = (float)player.coordinates.y;
-
-    x2 = (float)actual_square.x+0.1;
-    y2 = (float)actual_square.y;
+    if (currentY <= actual_square.y) {
+      int diffX = currentX - actual_square.x;
+      int diffY = actual_square.y - currentY;
+      while (diffX != 0 || diffY != 0) {
+        Coordonnes toLook = {currentX, currentY};
+        if (there_is_a_wall(toLook, true)) {
+          return false;
+        }
+        if (diffX == diffY) {
+          Coordonnes toLooka = {currentX - 1, currentY};
+          Coordonnes toLookb = {currentX, currentY + 1};
+          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
+            return false;
+          }
+          currentX--;
+          currentY++;
+        } else if (diffX < diffY) {
+          currentY++;
+        } else {
+          currentX--;
+        }
+        diffX = currentX - actual_square.x;
+        diffY = actual_square.y - currentY;
+      }
+      return true;
+    } else {
+      int diffX = currentX - actual_square.x;
+      int diffY = currentY - actual_square.y;
+      while (diffX != 0 || diffY != 0) {
+        Coordonnes toLook = {currentX, currentY};
+        if (there_is_a_wall(toLook, true)) {
+          return false;
+        }
+        if (diffX == diffY) {
+          Coordonnes toLooka = {currentX - 1, currentY};
+          Coordonnes toLookb = {currentX, currentY - 1};
+          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
+            return false;
+          }
+          currentX--;
+          currentY--;
+        } else if (diffX < diffY) {
+          currentY--;
+        } else {
+          currentX--;
+        }
+        diffX = currentX - actual_square.x;
+        diffY = currentY - actual_square.y;
+      }
+      return true;
+    }
   }
 
-  m = (y2-y1)/(x2-x1);
-  p = -m*x1 + y1;
 
-
-  bool corner0 = false;
-  bool corner1 = false;
-  bool corner2 = false;
-  bool corner3 = false;
-  bool center = true;
-
-  for (float x = x1; x < x2; x += 0.001) {
-    float y = x*m+p;
-
-    Coordonnes corner0_pos = {x,y};
-    Coordonnes corner1_pos = {x+0.9,y};
-    Coordonnes corner2_pos = {x,y+0.9};
-    Coordonnes corner3_pos = {x+0.9,y+0.9};
-    Coordonnes center_pos = {x+0.5,y+0.5};
-
-    if (corner0 && !equal(corner0_pos,actual_square) && !equal(corner0_pos,player.coordinates)) {
-      if (there_is_a_wall(corner0_pos,true))
-        corner0 = false;
-    }
-
-    if (corner1 && !equal(corner1_pos,actual_square) && !equal(corner1_pos,player.coordinates)) {
-      if (there_is_a_wall(corner1_pos,true))
-        corner1 = false;
-    }
-
-    if (corner2 && !equal(corner2_pos,actual_square) && !equal(corner2_pos,player.coordinates)) {
-      if (there_is_a_wall(corner2_pos,true))
-        corner2 = false;
-    }
-
-    if (corner3 && !equal(corner3_pos,actual_square) && !equal(corner3_pos,player.coordinates)) {
-      if (there_is_a_wall(corner3_pos,true))
-        corner3 = false;
-    }
-
-    if (center && !equal(center_pos,actual_square) && !equal(center_pos,player.coordinates)) {
-      if (there_is_a_wall(center_pos,true))
-        center = false;
-    }
-
-    if (!corner0 && !corner1 && !corner2 && !corner3 && !center)
-      return false;
-
-  }
-
-  return true;
+return false;
 }
 
 /*
 ###############
-#####     
+#####
 ###
 ###
 #
@@ -375,7 +406,7 @@ void display_maze() {
         for (int height = 0; height < square_size_y; height++) {
           mvhline(ligne+height, coll, ' ', square_size_x);
         }
-        attroff(COLOR_PAIR(CASE_PLEINE));   
+        attroff(COLOR_PAIR(CASE_PLEINE));
 
       }else if(player.coordinates.x == j && player.coordinates.y == i){
 
@@ -383,18 +414,18 @@ void display_maze() {
 
         attron(COLOR_PAIR(CASE_JOUEUR));
         for (int height = 0; height < square_size_y; height++) {
-          mvhline(ligne+height, coll, orientation_char[player.orientation], square_size_x); 
+          mvhline(ligne+height, coll, orientation_char[player.orientation], square_size_x);
         }
         attroff(COLOR_PAIR(CASE_JOUEUR));
 
       }else if(lab.arrival.x == j && lab.arrival.y == i) {
-        
+
         attron(COLOR_PAIR(CASE_ARRIVE));
         for (int height = 0; height < square_size_y; height++) {
           mvhline(ligne+height, coll, ' ', square_size_x);
         }
         attroff(COLOR_PAIR(CASE_ARRIVE));
-      
+
       }else if(lab.start.x == j && lab.start.y == i){
         // display cell arrival
 
@@ -468,7 +499,7 @@ void print_terminal(char* newStr){
 }
 
 /**
-* \brief write in program terminal like player position or if he reach the finish 
+* \brief write in program terminal like player position or if he reach the finish
 * \param str it's the pointer on the string we want to display in the program terminal
 */
 void write_terminal(char* str){
