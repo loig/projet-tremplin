@@ -1,0 +1,103 @@
+/**
+ * \file mazeResolution.c
+ * \brief library maze solving.
+ * \author Albert.G, Simon.P, Alexis.G
+ *
+ * library of different maze solving algorithms
+ *
+ */
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include "mazeResolution.h"
+
+void lefthand_algorithm(){
+  int orientation = 0;
+  if (0 || is_solvable()){
+    while (!arrival_reached()){
+      orientation = (orientation + 3) % 4;
+      turn_left();
+      if(is_move_forward_possible()){
+        move_forward();
+      }else{
+        orientation = (orientation + 1) % 4;
+        turn_right();
+        if(is_move_forward_possible()){
+          move_forward();
+        }else{
+          orientation = (orientation + 1) % 4;
+          turn_right();
+        }
+      }
+      write_coord_terminal();
+    }
+    print_terminal("Arrival reached !!!");
+    //submit(true);
+  }else{
+    print_terminal("No solution was found");
+    //submit(false);
+  }
+}
+
+
+void pledge_algorithm(){
+  int val;
+  while (!arrival_reached()) {
+    val = rand() %3;
+    switch (val) {
+    case 0:
+      turn_left();
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+      break;
+    case 1:
+      turn_right();
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+      break;
+    case 2:
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+      break;
+    default:
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+    }
+    write_coord_terminal();
+  }
+}
+
+void personal_algorithm() {
+  int val;
+  while (!arrival_reached()) {
+    val = rand() %3;
+    switch (val) {
+    case 0:
+      turn_left();
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+      break;
+    case 1:
+      turn_right();
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+      break;
+    case 2:
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+      break;
+    default:
+      if (is_move_forward_possible()) {
+        move_forward();
+      }
+    }
+    write_coord_terminal();
+  }
+}
