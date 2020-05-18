@@ -134,6 +134,214 @@ bool footstep_view_square(Coordonnes actual_square){
   return footprints[actual_square.y+1][actual_square.x+1];
 }
 
+bool bresenham(int x0, int y0, int x1, int y1) {
+  // checks if there is a wall on the line from (x0, y0)
+  // to (x1, y1), the line being defined according to
+  // Bresenham algorithm
+
+  // straight vertical line
+  if (x0 == x1) {
+    int x = x0;
+    if (y0 < y1) {
+      for (int y = y0; y <= y1; y++) {
+        if (y != y0 && y != y1) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+      }
+      return true;
+    } else {
+      for (int y = y1; y <= y0; y++) {
+        if (y != y0 && y != y1) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+      }
+      return true;
+    }
+  }
+
+  // straight horizontal line
+  if (y0 == y1) {
+    int y = y0;
+    if (x0 < x1) {
+      for (int x = x0; x <= x1; x++) {
+        if (x != x0 && x != x1) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+      }
+      return true;
+    } else {
+      for (int x = x1; x <= x0; x++) {
+        if (x != x0 && x != x1) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+      }
+      return true;
+    }
+  }
+
+  // lower right
+  if (x1 > x0 && y1 > y0) {
+    int deltaX = x1 - x0;
+    int deltaY = y1 - y0;
+    if (deltaX > deltaY) {
+      float deltaError = (float)deltaY / (float)deltaX;
+      float error = 0.0;
+      int y = y0;
+      for (int x = x0; x <= x1; x++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          y++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    } else {
+      float deltaError = (float)deltaX / (float)deltaY;
+      float error = 0.0;
+      int x = x0;
+      for (int y = y0; y <= y1; y++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          x++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    }
+  }
+
+  // lower left
+  if (x1 < x0 && y1 > y0) {
+    int deltaX = x0 - x1;
+    int deltaY = y1 - y0;
+    if (deltaX > deltaY) {
+      float deltaError = (float)deltaY / (float)deltaX;
+      float error = 0.0;
+      int y = y0;
+      for (int x = x1; x <= x0; x++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          y++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    } else {
+      float deltaError = (float)deltaX / (float)deltaY;
+      float error = 0.0;
+      int x = x1;
+      for (int y = y0; y <= y1; y++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          x++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    }
+  }
+
+  // upper right
+  if (x1 > x0 && y1 < y0) {
+    int deltaX = x1 - x0;
+    int deltaY = y0 - y1;
+    if (deltaX > deltaY) {
+      float deltaError = (float)deltaY / (float)deltaX;
+      float error = 0.0;
+      int y = y1;
+      for (int x = x0; x <= x1; x++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          y++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    } else {
+      float deltaError = (float)deltaX / (float)deltaY;
+      float error = 0.0;
+      int x = x0;
+      for (int y = y1; y <= y0; y++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          x++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    }
+  }
+
+  // upper left
+  if (x1 < x0 && y1 < y0) {
+    int deltaX = x0 - x1;
+    int deltaY = y0 - y1;
+    if (deltaX > deltaY) {
+      float deltaError = (float)deltaY / (float)deltaX;
+      float error = 0.0;
+      int y = y1;
+      for (int x = x1; x <= x0; x++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          y++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    } else {
+      float deltaError = (float)deltaX / (float)deltaY;
+      float error = 0.0;
+      int x = x1;
+      for (int y = y1; y <= y0; y++) {
+        if ((x != x0 || y != y0) && (x != x1 || y != y1)) {
+          Coordonnes currentPointOnLine = {x, y};
+          if (there_is_a_wall(currentPointOnLine, true)) return false;
+        }
+        error += deltaError;
+        if (error >= 0.5) {
+          x++;
+          error -= 1.0;
+        }
+      }
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool line_of_sight_view_square(Coordonnes actual_square){
 
   // always display the player
@@ -150,187 +358,49 @@ bool line_of_sight_view_square(Coordonnes actual_square){
       print_terminal(buf);
     }
 
-    // Straight line from the player X increasing
-    // and borders of this line
-    if ((actual_square.y == player.coordinates.y
-        || actual_square.y + 1 == player.coordinates.y
-        || actual_square.y - 1 == player.coordinates.y)
-        && actual_square.x > player.coordinates.x) {
-      for (int x = player.coordinates.x + 1; x < actual_square.x; x++) {
-        Coordonnes toLook = {x, player.coordinates.y};
-        if (there_is_a_wall(toLook, true)) {
-          return false;
-        }
-      }
+    // directly visible
+    if (bresenham(player.coordinates.x, player.coordinates.y, actual_square.x, actual_square.y)) {
       return true;
     }
 
-    // Straight line from right of the player Y increasing
-    // and borders of this line
-    if ((actual_square.x == player.coordinates.x
-        || actual_square.x + 1 == player.coordinates.x
-        || actual_square.x - 1 == player.coordinates.x)
-        && actual_square.y > player.coordinates.y) {
-      for (int y = player.coordinates.y + 1; y < actual_square.y; y++) {
-        Coordonnes toLook = {player.coordinates.x, y};
-        if (there_is_a_wall(toLook, true)) {
-          return false;
+    // close to a non-wall visible square
+    if (actual_square.x > player.coordinates.x) {
+      Coordonnes closer = {actual_square.x - 1, actual_square.y};
+      if (!there_is_a_wall(closer, true)) {
+        if (bresenham(player.coordinates.x, player.coordinates.y, actual_square.x - 1, actual_square.y)) {
+          return true;
         }
       }
-      return true;
     }
 
-  // We try to go from the player to the actual_square in a line as straight
-  // as possible and check that there is no wall on this line (if several lines
-  // are equivalent it is sufficient that there is no wall on one of them to
-  // consider that the player can see actual_square)
-  int currentX = player.coordinates.x;
-  int currentY = player.coordinates.y;
-  if (currentX <= actual_square.x) {
-    if (currentY <= actual_square.y) {
-      currentX++;
-      currentY++;
-      int diffX = actual_square.x - currentX;
-      int diffY = actual_square.y - currentY;
-      int stepX = diffX + 1;
-      int stepY = diffY + 1;
-      if (diffY != 0) stepX = diffX/diffY + 1;
-      if (diffX != 0) stepY = diffY/diffX + 1;
-      if (diffX == diffY) {
-        stepX = 1;
-        stepY = 1;
+    if (actual_square.x < player.coordinates.x) {
+      Coordonnes closer = {actual_square.x + 1, actual_square.y};
+      if (!there_is_a_wall(closer, true)) {
+        if (bresenham(player.coordinates.x, player.coordinates.y, actual_square.x + 1, actual_square.y)) {
+          return true;
+        }
       }
-      int currentStepX = stepX;
-      int currentStepY = stepY;
-      while (diffX > 0 || diffY > 0) {
-
-if (actual_square.x == testX && actual_square.y == testY) {
-      char buf[150];
-      sprintf(buf, "     Must go through square %d, %d (diffX: %d, diffY: %d, currentStepX: %d, currentStepY: %d)", currentX, currentY, diffX, diffY, currentStepX, currentStepY);
-      print_terminal(buf);
     }
 
-        Coordonnes toLook = {currentX, currentY};
-        if (there_is_a_wall(toLook, true)) {
-          return false;
+    if (actual_square.y > player.coordinates.y) {
+      Coordonnes closer = {actual_square.x, actual_square.y - 1};
+      if (!there_is_a_wall(closer, true)) {
+        if (bresenham(player.coordinates.x, player.coordinates.y, actual_square.x, actual_square.y - 1)) {
+          return true;
         }
-        if (currentStepX > currentStepY) {
-          currentX++;
-          currentStepX--;
-          diffX--;
-        } else if (currentStepX < currentStepY) {
-          currentY++;
-          currentStepY--;
-          diffY--;
-        } else {
-          //Coordonnes toLooka = {currentX + 1, currentY};
-          //Coordonnes toLookb = {currentX, currentY + 1};
-
-          if (actual_square.x == testX && actual_square.y == testY) {
-                char buf[150];
-                sprintf(buf, "     Must go through square %d, %d or square %d, %d", currentX+1, currentY, currentX, currentY + 1);
-                print_terminal(buf);
-              }
-
-          /*if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
-            return false;
-          }*/
-          if (stepX > stepY) {
-            currentY++;
-            currentStepY--;
-            diffY--;
-          } else {
-            currentX++;
-            currentStepX--;
-            diffX--;
-          }
-        }
-        if (currentStepX == 0 && diffX > 0) currentStepX = stepX;
-        if (currentStepY == 0 && diffY > 0) currentStepY = stepY;
       }
-      return true;
-    } /*else {
-      int diffX = actual_square.x - currentX;
-      int diffY = currentY - actual_square.y;
-      while (diffX != 0 || diffY != 0) {
-        Coordonnes toLook = {currentX, currentY};
-        if (there_is_a_wall(toLook, true)) {
-          return false;
-        }
-        if (diffX == diffY) {
-          Coordonnes toLooka = {currentX + 1, currentY};
-          Coordonnes toLookb = {currentX, currentY - 1};
-          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
-            return false;
-          }
-          currentX++;
-          currentY--;
-        } else if (diffX < diffY) {
-          currentY--;
-        } else {
-          currentX++;
-        }
-        diffX = actual_square.x - currentX;
-        diffY = currentY - actual_square.y;
-      }
-      return true;
-    }*/
-  } /*else {
-    if (currentY <= actual_square.y) {
-      int diffX = currentX - actual_square.x;
-      int diffY = actual_square.y - currentY;
-      while (diffX != 0 || diffY != 0) {
-        Coordonnes toLook = {currentX, currentY};
-        if (there_is_a_wall(toLook, true)) {
-          return false;
-        }
-        if (diffX == diffY) {
-          Coordonnes toLooka = {currentX - 1, currentY};
-          Coordonnes toLookb = {currentX, currentY + 1};
-          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
-            return false;
-          }
-          currentX--;
-          currentY++;
-        } else if (diffX < diffY) {
-          currentY++;
-        } else {
-          currentX--;
-        }
-        diffX = currentX - actual_square.x;
-        diffY = actual_square.y - currentY;
-      }
-      return true;
-    } else {
-      int diffX = currentX - actual_square.x;
-      int diffY = currentY - actual_square.y;
-      while (diffX != 0 || diffY != 0) {
-        Coordonnes toLook = {currentX, currentY};
-        if (there_is_a_wall(toLook, true)) {
-          return false;
-        }
-        if (diffX == diffY) {
-          Coordonnes toLooka = {currentX - 1, currentY};
-          Coordonnes toLookb = {currentX, currentY - 1};
-          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
-            return false;
-          }
-          currentX--;
-          currentY--;
-        } else if (diffX < diffY) {
-          currentY--;
-        } else {
-          currentX--;
-        }
-        diffX = currentX - actual_square.x;
-        diffY = currentY - actual_square.y;
-      }
-      return true;
     }
-  }*/
 
+    if (actual_square.y < player.coordinates.y) {
+      Coordonnes closer = {actual_square.x, actual_square.y + 1};
+      if (!there_is_a_wall(closer, true)) {
+        if (bresenham(player.coordinates.x, player.coordinates.y, actual_square.x, actual_square.y + 1)) {
+          return true;
+        }
+      }
+    }
 
-return false;
+    return false;
 }
 
 /*
