@@ -141,6 +141,45 @@ bool line_of_sight_view_square(Coordonnes actual_square){
       player.coordinates.y == actual_square.y)
     return true;
 
+    int testX = 17;
+    int testY = 3;
+
+    if (actual_square.x == testX && actual_square.y == testY) {
+      char buf[150];
+      sprintf(buf, "Looking at square %d, %d", actual_square.x, actual_square.y);
+      print_terminal(buf);
+    }
+
+    // Straight line from the player X increasing
+    // and borders of this line
+    if ((actual_square.y == player.coordinates.y
+        || actual_square.y + 1 == player.coordinates.y
+        || actual_square.y - 1 == player.coordinates.y)
+        && actual_square.x > player.coordinates.x) {
+      for (int x = player.coordinates.x + 1; x < actual_square.x; x++) {
+        Coordonnes toLook = {x, player.coordinates.y};
+        if (there_is_a_wall(toLook, true)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Straight line from right of the player Y increasing
+    // and borders of this line
+    if ((actual_square.x == player.coordinates.x
+        || actual_square.x + 1 == player.coordinates.x
+        || actual_square.x - 1 == player.coordinates.x)
+        && actual_square.y > player.coordinates.y) {
+      for (int y = player.coordinates.y + 1; y < actual_square.y; y++) {
+        Coordonnes toLook = {player.coordinates.x, y};
+        if (there_is_a_wall(toLook, true)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
   // We try to go from the player to the actual_square in a line as straight
   // as possible and check that there is no wall on this line (if several lines
   // are equivalent it is sufficient that there is no wall on one of them to
@@ -149,31 +188,68 @@ bool line_of_sight_view_square(Coordonnes actual_square){
   int currentY = player.coordinates.y;
   if (currentX <= actual_square.x) {
     if (currentY <= actual_square.y) {
+      currentX++;
+      currentY++;
       int diffX = actual_square.x - currentX;
       int diffY = actual_square.y - currentY;
-      while (diffX != 0 || diffY != 0) {
+      int stepX = diffX + 1;
+      int stepY = diffY + 1;
+      if (diffY != 0) stepX = diffX/diffY + 1;
+      if (diffX != 0) stepY = diffY/diffX + 1;
+      if (diffX == diffY) {
+        stepX = 1;
+        stepY = 1;
+      }
+      int currentStepX = stepX;
+      int currentStepY = stepY;
+      while (diffX > 0 || diffY > 0) {
+
+if (actual_square.x == testX && actual_square.y == testY) {
+      char buf[150];
+      sprintf(buf, "     Must go through square %d, %d (diffX: %d, diffY: %d, currentStepX: %d, currentStepY: %d)", currentX, currentY, diffX, diffY, currentStepX, currentStepY);
+      print_terminal(buf);
+    }
+
         Coordonnes toLook = {currentX, currentY};
         if (there_is_a_wall(toLook, true)) {
           return false;
         }
-        if (diffX == diffY) {
-          Coordonnes toLooka = {currentX + 1, currentY};
-          Coordonnes toLookb = {currentX, currentY + 1};
-          if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
-            return false;
-          }
+        if (currentStepX > currentStepY) {
           currentX++;
+          currentStepX--;
+          diffX--;
+        } else if (currentStepX < currentStepY) {
           currentY++;
-        } else if (diffX < diffY) {
-          currentY++;
+          currentStepY--;
+          diffY--;
         } else {
-          currentX++;
+          //Coordonnes toLooka = {currentX + 1, currentY};
+          //Coordonnes toLookb = {currentX, currentY + 1};
+
+          if (actual_square.x == testX && actual_square.y == testY) {
+                char buf[150];
+                sprintf(buf, "     Must go through square %d, %d or square %d, %d", currentX+1, currentY, currentX, currentY + 1);
+                print_terminal(buf);
+              }
+
+          /*if (there_is_a_wall(toLooka, true) && there_is_a_wall(toLookb, true)) {
+            return false;
+          }*/
+          if (stepX > stepY) {
+            currentY++;
+            currentStepY--;
+            diffY--;
+          } else {
+            currentX++;
+            currentStepX--;
+            diffX--;
+          }
         }
-        diffX = actual_square.x - currentX;
-        diffY = actual_square.y - currentY;
+        if (currentStepX == 0 && diffX > 0) currentStepX = stepX;
+        if (currentStepY == 0 && diffY > 0) currentStepY = stepY;
       }
       return true;
-    } else {
+    } /*else {
       int diffX = actual_square.x - currentX;
       int diffY = currentY - actual_square.y;
       while (diffX != 0 || diffY != 0) {
@@ -198,8 +274,8 @@ bool line_of_sight_view_square(Coordonnes actual_square){
         diffY = currentY - actual_square.y;
       }
       return true;
-    }
-  } else {
+    }*/
+  } /*else {
     if (currentY <= actual_square.y) {
       int diffX = currentX - actual_square.x;
       int diffY = actual_square.y - currentY;
@@ -251,7 +327,7 @@ bool line_of_sight_view_square(Coordonnes actual_square){
       }
       return true;
     }
-  }
+  }*/
 
 
 return false;
