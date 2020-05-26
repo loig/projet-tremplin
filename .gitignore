@@ -1,2 +1,9 @@
 *.o
+*.pdf
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.log
 ProjetTremplin
+testEtu/

@@ -12,3 +12,5 @@ Cette nouvelle version du projet est basée sur le travail de Albert Guihard, Al
 * main.c, le code principal de l'exécutable
 * lib/, la bibliothèque de gestion des labyrinthes
 * labs/, quelques exemples de labyrinthes
+* enonce/, l'énoncé du projet
+* fodaly/, l'explication du format de description des labyrinthes

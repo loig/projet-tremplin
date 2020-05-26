@@ -1,0 +1,413 @@
+\documentclass[a4paper]{article}
+
+\usepackage[frenchb]{babel}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{framed}
+\usepackage{comment}
+\usepackage{color}
+\usepackage{tikz}
+
+
+% Pour expliciter les objectifs de chaque jour
+\newenvironment{objectif}{%
+  \begin{framed}%
+  \noindent{\bf Objectifs du jour~:}%
+}{%
+  \end{framed}%
+}
+
+
+% Pour proposer des extensions au sujet pour les étudiants qui prennent de l'avance
+\newenvironment{plusloin}{%
+  \begin{framed}%
+  \noindent{\bf Pour aller plus loin~:}%
+}{%
+  \end{framed}%
+}
+
+% Choisir de compiler la version enseignant ou étudiant
+\newif\ifenseignant
+\enseignanttrue % version enseignant
+%\enseignantfalse % version étudiant
+% Pour les choses qui ne doivent apparaître que dans la version enseignants du sujet
+\ifenseignant
+\newenvironment{enseignants}[1]{\noindent\color{blue}{\bf #1}}{}
+\else
+%\newenvironment{enseignants}[1]{}{}
+\excludecomment{enseignants}
+\fi
+
+%\title{Labyrinthes~: projet d'accueil en DUT informatique}
+\title{Projet \textsf{Tremplin en DUT informatique} : \\
+construire et explorer des labyrinthes}
+\author{IUT de Nantes}
+\date{Année 2019--2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Lundi}
+
+\begin{objectif}
+  Prise en main de l’environnement numérique de l'IUT et écriture d'un premier programme C de parcours d'un labyrinthe.
+\end{objectif}
+
+  \begin{enseignants}{Comment ça va se passer~:}
+    \begin{enumerate}
+    \item Réception par mail du sujet
+    \item Récupération sur Madoc d'un premier fichier de labyrinthe et des sources C
+    \item Affichage de ce labyrinthe en compilant et exécutant un fichier main.c (on n'a pas encore regardé dans le fichier)
+    \item Recherche d'un chemin à la main
+    \item Codage en dur et affichage de ce chemin en C (avec explication de la bibliothèque)
+    \end{enumerate}
+  \end{enseignants}
+
+\begin{enseignants}{Environnement Linux~:}
+Montrer aux étudiants comment naviguer dans l’interface graphique, le multi-fenêtrage, et où trouver les applications (calculatrice, navigateur,etc.)
+\end{enseignants}
+
+\begin{enseignants}{Webmail~:}
+  Expliquer comment accéder au Webmail.
+  Montrer la complétion pour recherche l’email d’une personne, insister sur les adresses en \texttt{@etu.univ-nantes.fr} qui sont celles des étudiants et \texttt{@univ-nantes.fr} qui sont celles des personnels de l’Université. Par exemple \texttt{emmanuel.morin@univ-nantes.fr} est un enseignant du département informatique de l’IUT de Nantes et \texttt{emmanuel.morin@etu.univ-nantes.fr} celle d’un ancien étudiant de DUT GEII.
+\end{enseignants}
+
+Si vous arrivez à lire ce sujet c’est que vous avez réussi à accéder à votre boîte mail, c’est déjà un bon début !
+
+\subsection{Outils numériques}
+
+Le \textbf{Webmail} est l’un des outils numériques mis à disposition par l’Université de Nantes et accessible à partir de votre espace personnel. D’autres outils vous seront utiles tout au long de votre cursus universitaire comme \textbf{UNCloud}, qui permet le transfert de fichiers, ou plus encore \textbf{Madoc}, qui est une plate-forme pédagogique.
+
+Vous pouvez maintenant vous connecter sur Madoc, à partir de votre espace personnel, et chercher le cours \textbf{Projet Tremplin INFO1 (M0001)} pour récupérer les fichiers qui s'y trouvent (du \emph{code source C}, une \emph{bibliothèque statique} et un fichier décrivant un labyrinthe). Ces éléments vont nous permettre de commencer un peu à travailler.
+
+\begin{enseignants}{Madoc~:}
+  Montrer comment accéder à un cours sur Madoc, comment récupérer un fichier.
+\end{enseignants}
+
+\begin{enseignants}{}
+  Expliquer aux étudiants que le fichier de labyrinthe représente un labyrinthe dans un format textuel (ne pas rentrer dans les détails, ceci sera abordé plus tard).
+  Leur montrer comment compiler le main qu'ils ont récupéré. (On ne regarde pas le contenu du programme C pour le moment.)
+  Leur montrer comment l'exécuter. (En ayant mis le fichier de labyrinthe dans le même dossier que le main).
+  Puis demander aux étudiants de rechercher un chemin à la main sur le labyrinthe qui s'est affiché et de relever les coordonnées.
+\end{enseignants}
+
+\subsection{Manipulation de fichiers en ligne de commande}
+
+Avant de pouvoir travailler avec ce premier programme, il va falloir organiser vos fichiers dans votre système de fichier, sinon cela va être rapidement le bazar ! Nous allons vous montrer que l’on peut être bien plus efficace et rapide quand on travaille en utilisant le système de fichiers en \emph{ligne de commande} plutôt qu'à travers l’interface graphique.
+
+\begin{enseignants}{Système de fichiers~:}
+  Mettre l'accent sur la notion de chemin.
+  Déplacement dans l’arborescence (cd), suppression et copie de fichier (rm, cp, mv), création de répertoire (mkdir).
+\end{enseignants}
+
+Organisez vos fichiers de la manière suivante~: un répertoire (ou dossier) \textbf{projet\_rentree} contenant un répertoire \textbf{src} (dans lequel vous aurez placé tous les fichiers .c et .a) et un répertoire \textbf{lab} (dans lequel vous aurez placé notre premier labyrinthe).
+
+\subsection{Premier programme}
+
+Vous devez maintenant disposer d’un répertoire \textbf{projet\_rentree} contenant les éléments récupérés sur Madoc et vous allez pouvoir écrire votre premier programme !
+Pour cela, il va falloir indiquer dans le fichier \texttt{main.c} le chemin que vous avez relevé à la main pour sortir du labyrinthe.
+%La compilation de votre programme en C, qui permet de transformer votre programme en code machine compréhensible par l’ordinateur, se fera avec la commande XXX. Vous pouvez maintenant exécuter votre programme avec la commande YYY.
+
+\begin{enseignants}
+  Présentation de la structure du programme C, présentation des fonctions disponibles et des variables. Écrire au vidéo projecteur, avec les étudiants, en dur le chemin identifié à la main.
+  Attention, il faudra changer le chemin du fichier de labyrinthe pour que ça fonctionne, c'est l'occasion de reparler des chemins dans le système de fichiers.
+\end{enseignants}
+
+
+% Rappel des objectifs du lundi :
+%   Prise en main de l’environnement linux
+%   Prise en main du mail,
+%   de Madoc,
+%   de la bibliothèque pour les labyrinthes,
+%   compréhension de la notion de chemin dans le système de fichiers
+
+% Proposition de mise en œuvre :
+%   1. Réception par mail du sujet
+%   2. Récupération sur Madoc d'un premier fichier de labyrinthe
+%   3. Affichage de ce labyrinthe en utilisant la bibliothèque
+%   4. Recherche d'un chemin à la main
+%   5. Codage en dur et affichage de ce chemin en C
+
+% Idées pour aller plus loin :
+%   Implantation d'une marche aléatoire
+
+
+\section{Mardi}
+
+\begin{objectif}
+  Étude et mise en \oe uvre de différentes stratégies pour sortir d’un labyrinthe.
+  Utilisation de \emph{ssh} pour accéder à des fichiers sur un serveur distant.
+\end{objectif}
+
+  %% \begin{enseignants}{Comment ça va se passer}
+  %%   \begin{enumerate}
+  %%     \item Présentation de la stratégie de la main gauche
+  %%     \item Implantation de cette stratégie
+  %%     \item Test sur le labyrinthe de la veille
+  %%     \item Récupération d'un nouveau labyrinthe avec scp
+  %%     \item Constat que la main gauche ne fonctionne pas (+ réflexion sur les raisons de l'échec de cette stratégie)
+  %%     \item Présentation de l'algorithme de Pledge
+  %%     \item Implantation de cet algo
+  %%   \end{enumerate}
+  %% \end{enseignants}
+
+\subsection{Stratégie de la main gauche}
+
+Une stratégie classique pour sortir d’un labyrinthe, connue sous le nom de parcours avec la main gauche sur le mur, consiste à avancer vers le haut jusqu'à rencontrer un mur puis à partir de là à suivre ce mur de façon à toujours «~garder la main gauche~» sur celui-ci. %Cela fonctionne aussi avec la main droite mais uniquement quand la droite est au pouvoir !
+Pour mieux comprendre cette stratégie, nous vous invitons à reprendre votre premier labyrinthe et à représenter le chemin parcouru avec la stratégie de la main gauche. C’est compris ? \`A vous alors de programmer maintenant cette stratégie dans le fichier \texttt{main.c} et de l’évaluer avec votre premier labyrinthe (vous pourrez essayer plusieurs points de départ et d'arrivée).
+
+\begin{enseignants}{De l'aide~:}
+Les étudiants auront besoin d'aide. Le mieux est probablement de programmer au vidéo projecteur tous ensemble. Notez que l'orientation (nécessaire pour savoir sur quel mur est la main gauche) et la position courante, sont à définir soit même (arbitrairement pour l'orientation initiale) et à stocker dans des variables qui seront mises à jour à chaque déplacement ou rotation.
+\end{enseignants}
+
+\begin{enseignants}{Réflexion à avoir avec les étudiants une fois l'implantation de la stratégie de la main gauche terminée~:}
+Il serait intéressant à ce moment de réfléchir à la validité de la stratégie de la main gauche (on constatera que ça ne marche pas toujours juste après). Ça fonctionne pour tout labyrinthe dans lequel on entre par un mur extérieur et on sort par un mur extérieur (i.e. les labyrinthes classiques qu'on trouve dans les magazines pour enfants). Ça fonctionne dans nos labyrinthes à partir du moment où le départ n'est pas sur un ilôt différent de celui où est l'arrivée.
+\end{enseignants}
+
+\subsection{Interlude~: découverte de SSH}
+
+Nous vous proposons maintenant de récupérer un nouveau labyrinthe (\verb|second_lab.fodaly|) en vous connectant au serveur dont l'adresse doit vous être donnée par l'enseignant présent dans votre salle (nom d'utilisateur \textit{votrenomdefamillesansespacesetsansaccents}, mot de passe \textit{votrenomdutilisateur}) à l'aide de la commande \textbf{ssh}.
+Localisez le fichier dans le répertoire personnel de l'utilisateur \textbf{prof}, puis rapatriez-le en utilisant la commande \textbf{scp}.
+
+\begin{enseignants}{SSH~:}
+  Introduction rapide à ssh et scp
+  faire changer les mots de passe avec passwd
+\end{enseignants}
+
+\subsection{Retour à la main gauche}
+
+Quel est le résultat de votre implantation de la stratégie de la main gauche avec ce nouveau labyrinthe~? Comment expliquez-vous ce résultat~?
+
+\begin{enseignants}{Suite de la réflexion précédente~:}
+Faire réfléchir les étudiants sur l’échec de cette stratégie.
+\end{enseignants}
+
+\subsection{Algorithme de Pledge}
+
+Nous allons maintenant étudier un second algorithme, connu sous le nom d’algorithme de Pledge.
+Celui-ci permet de se sortir de certains labyrinthes pour lesquels l'algorithme de la main gauche ne fonctionne pas (mais aussi de tous les labyrinthes pour lesquels l'algorithme de la main gauche fonctionne).
+
+Le principe de cet algorithme est toujours de longer un mur pour se déplacer mais en évitant de rester coincé sur un îlot (un ensemble de murs, non relié aux bords de l'arène).
+Pour éviter cela, il va falloir savoir quand lâcher prise et se jeter dans le vide !
+On utilisera un compteur pour détecter qu'on a fait le tour d'un îlot.
+
+Notons $t$ (comme \emph{turn}) un compteur. Cet algorithme fonctionne de la façon suivante~:
+\begin{enumerate}
+\item Initialiser $t$ à la valeur $0$.
+\item Choisir une direction $d$.
+\item Se déplacer~:
+  \begin{itemize}
+  \item Si $t$ vaut $0$ et qu'on peut aller dans la direction $d$, le faire.
+  \item Sinon, appliquer la stratégie de la main gauche en changeant la valeur de $t$ à chaque changement de direction ($-1$ pour un quart de tour à gauche, $+1$ pour un quart de tour à droite) jusqu'à ce que $t$ ait à nouveau pour valeur $0$.
+  \end{itemize}
+\item Retourner à l'étape 3 tant qu'on n'est pas à l'arrivée.
+\end{enumerate}
+
+%% La mise en \oe{}uvre de cette stratégie nécessite de disposer d’un compteur initialisé à 0 et l’on commence par aller tout droit jusqu’au mur d’en face. \`A partir de ce mur, on tourne à gauche et l’on ajoute au compteur 1 lorsque l’on tourne à droite et en retirant 1 lorsque l’on tourne à gauche. Si la compteur indique 0, alors on lâche à nouveau le mur pour aller en face. En vous appuyant sur votre dernier labyrinthe (celui qui coince avec la méthode la main droite), quel est maintenant le chemin parcouru ? L’algorithme associé à cette nouvelles stratégie est proposé ci-dessous en pseudo-code. \`A vous de le traduire maintenant en langage C est à l’évaluer avec vos différents labyrinthes.
+
+%% \`A vous maintenant de mettre en oeuvre cet algorithme dans votre programme est de l’évaluer avec vos différents labyrinthes. Quels sont les conclusions de vos évaluations ?
+
+\begin{enseignants}{Sur l'algorithme de Pledge~:}
+  Le faire tourner à la main avant tout.
+  Et, comme d'habitude, l'implémenter au vidéo projecteur avec les étudiants plutôt que leur laisser faire ça seuls.
+  Se demander si ça fonctionne toujours (réponse~: non, prendre par exemple le labyrinthe G avec un point de départ à l'extérieur du G et l'arrivée à l'intérieur, en fait ça fonctionne pour n'importe quel point de départ à condition que l'arrivée soit sur un mur extérieur).
+\end{enseignants}
+
+Pour faire quelques tests vous pourrez trouver d'autres labyrinthes sur le serveur où vous avez récupéré le dernier exemple.
+Testez vos implantations de la stratégie de la main gauche et de l'algorithme de Pledge sur ces labyrinthes avec différents points de départ et d'arrivée.
+
+\begin{enseignants}{But de ces nouveaux labyrinthes~:}
+  Revoir ssh, cd, scp en les manipulant à distance puis en les rapatriant localement.
+  Éventuellement constater que Pledge ne fonctionne pas toujours.
+\end{enseignants}
+
+% Rappel des objectifs du mardi :
+%   Étude de différentes stratégies pour sortir de labyrinthes,
+%   implantation,
+%   réflexions sur le fonctionnement, l'efficacité de ces stratégies,
+%   utilisation de ssh
+
+% Proposition de mise en œuvre :
+%   1. Présentation de la stratégie de la main gauche
+%   2. Implantation de cette stratégie
+%   3. Test sur le labyrinthe de la veille (et comparaison du chemin avec celui trouvé à la main ?)
+%   4. Récupération d'un nouveau labyrinthe avec scp
+%   5. Constat que la main gauche ne fonctionne pas (+ réflexion sur les raisons de l'échec de cette stratégie)
+%   6. Présentation de l'algorithme de Pledge
+%   7. Implantation de cet algo
+
+% Idées pour aller plus loin :
+%   Constater que Pledge fonctionne dans le noir (i.e. sans connaître la position de départ)
+
+\section{Mercredi}
+
+\begin{objectif}
+  Construction de labyrinthes à partir de plusieurs fichiers.
+  Prise en main plus approfondie de la ligne de commande Linux.
+\end{objectif}
+
+\subsection{Les fichiers Fodaly}
+
+Dans un premier temps nous allons chercher à comprendre le principe de représentation des labyrinthes utilisés dans les fichiers avec l'extension \verb|.fodaly|.
+En particulier, on notera qu'ils peuvent être combinés entre eux pour former de nouveaux labyrinthes, simplement en les concaténant.
+Pour cela, récupérez sur Madoc le fichier \verb|rfc.pdf| et lisez le attentivement.
+
+\begin{enseignants}
+  Il sera probablement nécessaire d'accompagner les étudiants dans la lecture de ce fichier, qui décrit le fonctionnement de la représentation des labyrinthes par des fichiers textes.
+\end{enseignants}
+
+La figure~\ref{fig:alab} représente un(e arène de) labyrinthe.
+Écrivez un fichier avec l'extension \verb|.fodaly| représentant ce labyrinthe.
+Est-ce que le fichier que vous avez écrit est le seul possible ?
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+
+    \draw[draw=black!30] (0, 0) -- (3, 0);
+    \draw[draw=black!30] (0, -1) -- (3, -1);
+    \draw[draw=black!30] (0, -2) -- (3, -2);
+    \draw[draw=black!30] (0, -3) -- (3, -3);
+    \draw[draw=black!30] (0, 0) -- (0, -3);
+    \draw[draw=black!30] (1, 0) -- (1, -3);
+    \draw[draw=black!30] (2, 0) -- (2, -3);
+    \draw[draw=black!30] (3, 0) -- (3, -3);
+
+    \draw[draw=black, very thick] (0, 0) -- (3, 0);
+    \draw[draw=black, very thick] (0, -3) -- (3, -3);
+    \draw[draw=black, very thick] (0, 0) -- (0, -3);
+    \draw[draw=black, very thick] (3, 0) -- (3, -3);
+    \draw[draw=black, very thick] (1, -1) -- (3, -1);
+    \draw[draw=black, very thick] (1, -2) -- (2, -2);
+    \draw[draw=black, very thick] (2, -1) -- (2, -2);
+
+  \end{tikzpicture}
+  \caption{Un labyrinthe.}\label{fig:alab}
+\end{figure}
+
+\begin{enseignants}
+  Faire écrire plusieurs fichiers différents représentant le même labyrinthe~: avec des sauts de lignes et/ou en changeant les murs qui sont cachés par les bords de l'arène.
+\end{enseignants}
+
+Récupérez le fichier \verb|third_lab.fodaly| sur le serveur d'hier.
+À partir du fichier, dessinez l'arène qu'il représente.
+Affichez le labyrinthe en C pour valider votre dessin.
+
+% Leur faire créer un fichier à partir d'un labyrinthe
+% Leur faire dessiner un labyrinthe à partir d'un fichier
+
+\subsection{La commande cat}
+
+Maintenant que vous avez compris le principe de représentation des labyrinthes, vous devez avoir noté qu'on peut en construire de nouveaux simplement en copiant, les uns à la suite des autres, d'autres labyrinthes plus petits. Il existe une commande permettant justement de mettre les contenu de plusieurs fichiers les uns à la suite des autres (on parle de concaténer les fichiers), c'est la commande \textbf{cat}.
+
+\begin{enseignants}
+  Présenter la commande cat.
+  Faire une petite explication sur la sortie standard et les redirections.
+\end{enseignants}
+
+En vous connectant en ssh sur le serveur d'hier vous allez récupérer de petits labyrinthes (de taille 3 par 3). Vous allez concaténer ces morceaux de labyrinthes pour construire de plus gros labyrinthes que vous allez pouvoir résoudre avec votre programme.
+Dans un premier temps vous effectuerez tout le processus à la main,
+ensuite, vous chercherez à l'automatiser le plus possible.
+
+\begin{enseignants}
+  Pour automatiser on peut écrire un petit script, d'abord dans lequel on rentrera les noms de fichiers des labyrinthes à la main, puis éventuellement prenant en paramètre les noms de fichiers, et même prenant en paramètre les identifiants des labyrinthes.
+
+  On peut aussi imaginer appeler le programme C directement dans le script, par exemple en nommant toujours de la même façon le labyrinthe généré. Il n'est probablement pas souhaitable de voir comment passer des paramètres à un programme C.
+
+  Les étudiants remarqueront probablement d'eux-même que taper leur mot de passe à chaque fois est laborieux. On devrait les faire générer des couples de clés pour automatiser la connexion au serveur ssh.
+\end{enseignants}
+
+Tous les labyrinthes que nous allons construire seront de taille 9 par 9, c'est-à-dire qu'ils seront tous constitués de 9 fichiers décrivant des labyrinthes de taille 3 par 3. Ceci facilitera l'automatisation du processus. Vous pourrez cependant essayer par vous même de construire des labyrinthes d'autres dimensions si vous le souhaitez.
+
+\begin{enseignants}{Attention}
+Pour rappel (cf le fichier expliquant le format des labyrinthes) on décrit les labyrinthes colonne par colonne, avec une ligne de blanc après chaque colonne. Il faudra donc créer un fichier contenant simplement une ligne vide et l'utiliser entre chaque groupe de trois fichiers de labyrinthes durant la concaténation.
+\end{enseignants}
+
+Les arènes de labyrinthes à construire sont décrites par la figure~\ref{table:groslabs}.
+Chaque tableau de neuf cases décrit une arène, chaque case étant une arène de taille 3 par 3 identifiée par le nom du fichier la décrivant sur le serveur.
+Pour en faire des labyrinthes on prendra à chaque fois la case $(2,3)$ comme point de départ et la case $(6,2)$ comme arrivée.
+Pour chacun des labyrinthes construits, indiquer si on peut trouver l'arrivée à partir du départ et utiliser les algorithmes implantés les jours précédents pour trouver une solution le cas échéant.
+
+\begin{figure}[htbp]
+  \centering
+\begin{tabular}{|c|c|c|}
+  \hline
+  0/0/3/2/0/2 & 0/0/1/5/0/5 & 0/0/6/1/0/0 \\
+  \hline
+  3/0/0/0/3/2 & 0/1/0/1/5/2 & 7/4/2/3/4/1 \\
+  \hline
+  3/0/5/3/2/0 & 0/6/3/2/5/0 & 4/5/2/2/4/0 \\
+  \hline
+\end{tabular}
+\hspace{0.5cm}
+\begin{tabular}{|c|c|c|}
+  \hline
+  0/1/0/2/3/1 & 0/0/7/4/3/0 & 0/0/6/0/7/0 \\
+  \hline
+  5/1/3/1/4/1 & 7/0/7/0/7/0 & 7/0/6/0/7/0 \\
+  \hline
+  3/1/4/1/3/0 & 7/0/7/0/7/0 & 6/0/7/0/6/0 \\
+  \hline
+\end{tabular}
+
+\vspace{0.5cm}
+
+\begin{tabular}{|c|c|c|}
+  \hline
+  0/0/0/0/0/0 & 0/4/0/4/0/4 & 0/0/0/0/0/0 \\
+  \hline
+  0/0/0/0/0/0 & 0/4/0/4/0/4 & 0/0/0/0/0/0 \\
+  \hline
+  0/0/0/0/0/0 & 0/4/0/4/0/4 & 0/0/0/0/0/0 \\
+  \hline
+\end{tabular}
+\hspace{0.5cm}
+\begin{tabular}{|c|c|c|}
+  \hline
+  0/0/0/0/0/0 & 0/0/0/0/0/0 & 0/0/0/0/0/0 \\
+  \hline
+  0/0/0/0/7/3 & 3/7/4/0/1/7 & 0/0/0/0/7/2 \\
+  \hline
+  0/3/6/0/0/0 & 1/7/4/0/0/0 & 0/2/3/0/0/0 \\
+  \hline
+\end{tabular}
+\caption{Labyrinthes à construire}\label{table:groslabs}
+\end{figure}
+
+
+% Rappel des objectifs du mercredi :
+%   notions de système (cd, cp, cat, etc),
+%   compréhension du format de fichier représentant les labyrinthes
+
+% Proposition de mise en œuvre :
+%   (des morceaux de labyrinthes seront disponibles dans une arborescence de fichiers structurée dispo sur un serveur ssh)
+%   1. Construire des labyrinthes en en concaténant plusieurs à la main (scp + cat + >)
+%   2. Automatisation avec un script (seulement pour aller plus loin ?)
+%   3. C'est aussi probablement mercredi qu'il faudra leur montrer comment utiliser le serveur qui validera la résolution des labyrinthes le lendemain : EM -> ou alors juste le jeudi matin pour éviter que cela joue toute la nuit…
+
+%% \section{Jeudi}
+
+%% \begin{objectif}
+%% À vous de jouer !
+%% \end{objectif}
+
+%% Vous pouvez récupérer sur Madoc une nouvelle version de la bibliothèque de manipulation de labyrinthes.
+%% Celle-ci est identique à celle que vous avez utilisée les jours précédents, si ce n'est qu'elle contient une fonction de plus~: \textbf{submit}.
+
+%% Cette fonction vous permet de soumettre à un serveur une solution à un labyrinthe.
+%% Pour cela vous devez d'abord faire en sorte (comme les jours précédents) de vous déplacer jusqu'à l'arrivée du labyrinthe, puis appeler la fonction \textbf{submit} en lui passant votre numéro d'étudiant.
+%% La fonction vous retourne soit un code d'erreur (décrit dans le fichier .h), soit un nouveau labyrinthe à résoudre.
+
+%% Vous disposez d'une heure pour écrire un programme résolvant des labyrinthes et appelant la fonction \textbf{submit} pour soumettre les résultats au serveur.
+%% Passer ce délai, le serveur sera remis à zéro.
+%% Votre but est de résoudre le plus de labyrinthe possible dans le temps imparti.
+
+% Attention : ceci ne doit pas être visible dans le sujet avant le jour même
+
+% Rappel des objectifs du jeudi :
+%   compétition entre les étudiants, c'est à celui qui résoudra le plus de labyrinthes en un temps donné
+
+\end{document}
+\grid
