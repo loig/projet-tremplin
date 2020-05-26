@@ -1,6 +1,6 @@
 /**
  * \file display.h
- * \brief Display contain all the functions necessary to initialize and update 
+ * \brief Display contain all the functions necessary to initialize and update
  * a labyrinth using Ncurses.
  * \author Albert.G, Simon.P, Alexis.G
  * \version 1.0
@@ -24,6 +24,12 @@
 
 WINDOW *window, *mazeWindow, *legende, *tableauDeBord, *terminal;
 
+
+/**
+* \brief Display the textual help usage of the program
+*/
+void display_help();
+
 /**
 * \brief Display legend in order for explanations on the color code of cells
 * \param xDebutLegende position x from where the legend begins
@@ -37,7 +43,7 @@ void display_legende(int, int);
 void display_dashboard();
 
 /**
-* \brief write in program terminal like player position or if he reach the finish 
+* \brief write in program terminal like player position or if he reach the finish
 * \param str it's the pointer on the string we want to display in the program terminal
 */
 void write_terminal(char*);

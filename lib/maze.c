@@ -9,6 +9,7 @@
  */
 
 #include "maze.h"
+#include "display.h"
 
 #define CASE_VIDE 1
 #define CASE_PLEINE 2
@@ -30,7 +31,8 @@ void size_map_lab() {
   fichier = fopen(parameters.labName, "r");
 
   if (fichier == NULL) {
-    printf("Error opening file\n");
+    printf("With the options you used, you must specify a fodaly file\n");
+    display_help();
     exit(1);
   }
 
@@ -107,7 +109,8 @@ void load_map_lab() {
 
 
   if (fichier == NULL) {
-    printf("Error opening file\n");
+    printf("With the options you used, you must specify a fodaly file\n");
+    display_help();
     exit(1);
   }
 

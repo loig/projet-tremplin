@@ -23,6 +23,51 @@ char* cleaner;
 List listTerminal = {NULL, 0};
 int sizeCleaner = 0;
 
+void display_help() {
+    printf(""
+      "Usage : ./ProjetTremplin [option...] [labPath]\n"
+      "-d mode : change display mode\n"
+        "\t0 : classic display (default)\n"
+        "\t1 : 8 arround display\n"
+        "\t2 : front view display\n"
+        "\t3 : 8 arround + memory display\n"
+        "\t4 : line of sight display (in progress)\n"
+        "\t5 : 3d display (not working)\n"
+        "\t9 : no display\n"
+        "\n"
+      "-a algorithm : change algorithm\n"
+        "\t0 : left hand algorithm (default)\n"
+        "\t1 : pledge algorithm\n"
+        "\t2 : personnal algorithm\n"
+        "\t9 : keyboard resolution\n"
+        "\n"
+      "-g mode : generate random maze\n"
+        "\t1 : generate maze with roots\n"
+        "\t1 : generate maze completely randomly\n"
+        "\n"
+        "--xsize x : defines the size of the maze to generate\n"
+        "\n"
+        "--ysize y : defines the size of the mawe to generate\n"
+        "\n"
+      "--speed step : change speed execution\n"
+        "\t0 : no time between move\n"
+        "\t1 : 10ms time between move\n"
+        "\t2 : 100ms time between move\n"
+        "\t3 : 25ms time between move (default)\n"
+        "\tS : Sms time between move\n"
+        "\n"
+      "--start Coordinates (x,y) : change start coordinate\n"
+      "\n"
+      "--arrival Coordinates (x,y) : change arrival coordinate\n"
+      "\n"
+      "--start-random : change start coordinate randomly\n"
+      "\n"
+      "--arrival-random : change start coordinate randomly\n"
+      "\n"
+      "-h : display this help\n"
+    );
+}
+
 /**
 * \brief get the size of the list that was displayed in the terminal
 */
