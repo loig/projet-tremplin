@@ -18,7 +18,7 @@ project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LI
 	${MKDIR} -p etu
 	${LINK} -r ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o -o etu/labs.o
 	${CP} ${LIBDIR}labs.h etu/labs.h
-	${CP} ${LIBDIR}mazeResolution.c etu/mazeResolution.c
+	scripts/simplify.sh ${LIBDIR}mazeResolution.c etu/mazeResolution.c
 	${CP} generator etu/generator
 
 generator: generation/generator.c

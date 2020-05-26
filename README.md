@@ -15,6 +15,7 @@ Cette nouvelle version du projet est basée sur le travail de Albert Guihard, Al
 * enonce/, l'énoncé du projet
 * fodaly/, l'explication du format de description des labyrinthes
 * generation/, les outils de génération de labyrinthes
+* scripts/, des scripts utiles pour générer la version étudiant du projet
 
 ## Quelques notes sur le Makefile
 

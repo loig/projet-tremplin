@@ -7,12 +7,11 @@
  *
  */
 #include <stdlib.h>
-#include <stdbool.h>
 #include <unistd.h>
 //#include "mazeResolution.h"
 #include "labs.h"
 
-void lefthand_algorithm(){
+void lefthand_algorithm() {
   int orientation = 0;
   if (0 || is_solvable()){
     while (!arrival_reached()){
@@ -41,7 +40,7 @@ void lefthand_algorithm(){
 }
 
 
-void pledge_algorithm(){
+void pledge_algorithm() {
   int val;
   while (!arrival_reached()) {
     val = rand() %3;

@@ -1,7 +1,5 @@
+#include <stdbool.h>
 
-/**
- * all functions students are allow tu use
-*/
 bool is_solvable();
 bool arrival_reached();
 void turn_left();
