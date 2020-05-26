@@ -345,9 +345,7 @@ bool bresenham(int x0, int y0, int x1, int y1) {
 bool line_of_sight_view_square(Coordonnes actual_square){
 
   // always display the player
-  if (player.coordinates.x == actual_square.x &&
-      player.coordinates.y == actual_square.y)
-    return true;
+  if (player.coordinates.x == actual_square.x && player.coordinates.y == actual_square.y) {return true;}
 
     int testX = 17;
     int testY = 3;
@@ -411,10 +409,13 @@ bool line_of_sight_view_square(Coordonnes actual_square){
 #
 
 */
+/*
 void draw3D(int x, int y) {
 
 }
+*/
 
+/*
 //taille du tableau : 28 "cubes" (deux espaces)
 bool troisD_view() {
 
@@ -453,6 +454,7 @@ bool troisD_view() {
 
   return false;
 }
+*/
 
 /**
 * \brief display the maze
@@ -527,8 +529,13 @@ void display_maze() {
   case 4 :
     is_square_display_needed = line_of_sight_view_square;
     break;
+    /*
   case 5 :
     troisD_view();
+    break;
+    */
+  default:
+    is_square_display_needed = default_view_square;
     break;
   }
 
@@ -537,10 +544,12 @@ void display_maze() {
 
       Coordonnes actual_square = {j,i};
 
+/*
       if (parameters.display == 5) {
         troisD_view(actual_square);
 
-      } else if (!is_square_display_needed(actual_square)) {
+      } else */
+      if (!is_square_display_needed(actual_square)) {
         attron(COLOR_PAIR(CASE_NOIR));
         for (int height = 0; height < square_size_y; height++) {
           mvhline(ligne+height, coll, ' ', square_size_x);

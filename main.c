@@ -467,32 +467,6 @@ void historic(WINDOW* window) {
   }
 }
 
-/**
-* \brief use the option in the parameter struct for select
-*/
-void resolution() {
-  switch (parameters.resolution){
-  case 0:
-    lefthand_algorithm();
-    break;
-  case 1:
-    pledge_algorithm();
-    break;
-  case 2:
-    personal_algorithm();
-    break;
-  case 3:
-    comparaison();
-    break;
-  case 9:
-    keypad(window, TRUE);
-    keyboard_solve(window);
-    break;
-  default:
-    lefthand_algorithm();
-    break;
-  }
-}
 
 void comparaison(){
   //Left_hand algorithm
@@ -534,6 +508,33 @@ void comparaison(){
     printf("%s\n",str_left);
     printf("%s\n",str_pledge);
     printf("%s\n",str_perso);
+  }
+}
+
+/**
+* \brief use the option in the parameter struct for select
+*/
+void resolution() {
+  switch (parameters.resolution){
+  case 0:
+    lefthand_algorithm();
+    break;
+  case 1:
+    pledge_algorithm();
+    break;
+  case 2:
+    personal_algorithm();
+    break;
+  case 3:
+    comparaison();
+    break;
+  case 9:
+    keypad(window, TRUE);
+    keyboard_solve(window);
+    break;
+  default:
+    lefthand_algorithm();
+    break;
   }
 }
 
