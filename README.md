@@ -14,3 +14,8 @@ Cette nouvelle version du projet est basée sur le travail de Albert Guihard, Al
 * labs/, quelques exemples de labyrinthes
 * enonce/, l'énoncé du projet
 * fodaly/, l'explication du format de description des labyrinthes
+
+## Quelques notes sur le Makefile
+
+* make produit un executable avec les fichiers du dépôt
+* make project construit une archive de ce qu'il faut donner aux étudiants
