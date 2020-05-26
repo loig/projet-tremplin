@@ -20,6 +20,7 @@ project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LI
 	${CP} ${LIBDIR}labs.h etu/labs.h
 	scripts/simplify.sh ${LIBDIR}mazeResolution.c etu/mazeResolution.c
 	${CP} generator etu/generator
+	${CP} labs/first_lab.fodaly etu/first_lab.fodaly
 
 generator: generation/generator.c
 	${CC} ${CFLAGSSHORT} generation/generator.c -o generator

@@ -2,8 +2,6 @@
 
 # cut the mazeResolution.c file to make it suitable for students
 
-echo "plop"
-
 # first argument is the origin file
 origin=$1
 
