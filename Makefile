@@ -1,5 +1,6 @@
 CC=gcc
 LINK=ld
+CFLAGSSHORT=-Wall -Wextra -pedantic
 CFLAGS=-Wall -Wextra -pedantic -c
 PROGRAM=ProjetTremplin
 RM=rm
@@ -13,11 +14,15 @@ LIBDIR=lib/
 all: ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o
 	${CC} main.o ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o -o ${PROGRAM} -lncurses -lm
 
-project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o
+project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o generator
 	${MKDIR} -p etu
 	${LINK} -r ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o -o etu/labs.o
 	${CP} ${LIBDIR}labs.h etu/labs.h
 	${CP} ${LIBDIR}mazeResolution.c etu/mazeResolution.c
+	${CP} generator etu/generator
+
+generator: generation/generator.c
+	${CC} ${CFLAGSSHORT} generation/generator.c -o generator
 
 main.o: main.c
 	${CC} ${CFLAGS} main.c
@@ -43,4 +48,5 @@ display.o: ${LIBDIR}display.c ${LIBDIR}display.h
 clean:
 	${RM} ${RMFLAGS} ${PROGRAM}
 	${RM} ${RMFLAGS} *.o
-	${RM} ${RMFLAGS}  ${LIBDIR}*.o
+	${RM} ${RMFLAGS} ${LIBDIR}*.o
+	${RM} ${RMFLAGS} generator
