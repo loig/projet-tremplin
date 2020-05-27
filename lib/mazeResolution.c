@@ -31,10 +31,10 @@ void lefthand_algorithm() {
       }
       write_coord_terminal();
     }
-    print_terminal("Arrival reached !!!");
+    write_terminal("Arrival reached !!!");
     //submit(true);
   }else{
-    print_terminal("No solution was found");
+    write_terminal("No solution was found");
     //submit(false);
   }
 }

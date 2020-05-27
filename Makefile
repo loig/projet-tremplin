@@ -15,12 +15,20 @@ all: ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.
 	${CC} main.o ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o -o ${PROGRAM} -lncurses -lm
 
 project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o generator
-	${MKDIR} -p etu
-	${LINK} -r ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o -o etu/labs.o
-	${CP} ${LIBDIR}labs.h etu/labs.h
-	scripts/simplify.sh ${LIBDIR}mazeResolution.c etu/mazeResolution.c
-	${CP} generator etu/generator
-	${CP} labs/first_lab.fodaly etu/first_lab.fodaly
+	${MKDIR} -p project
+	${MKDIR} -p project/mail
+	${CP} enonce/enonce.pdf project/mail/enonce.pdf
+	${MKDIR} -p project/madoc1
+	${LINK} -r ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o -o project/madoc1/labs.o
+	${CP} ${LIBDIR}labs.h project/madoc1/labs.h
+	scripts/simplify.sh ${LIBDIR}mazeResolution.c project/madoc1/mazeResolution.c
+	${CP} generator project/madoc1/generator
+	${CP} labs/first_lab.fodaly project/madoc1/first_lab.fodaly
+	${MKDIR} -p project/madoc2
+	${CP} fodaly/rfc.pdf project/madoc2/rfc.pdf
+	${MKDIR} -p project/ssh
+	${CP} labs/second_lab.fodaly project/ssh/second_lab.fodaly
+	${CP} labs/third_lab.fodaly project/ssh/third_lab.fodaly
 
 generator: generation/generator.c
 	${CC} ${CFLAGSSHORT} generation/generator.c -o generator
@@ -54,3 +62,5 @@ clean:
 	${RM} ${RMFLAGS} *.o
 	${RM} ${RMFLAGS} ${LIBDIR}*.o
 	${RM} ${RMFLAGS} generator
+	${RM} ${RMFLAGS} spliter
+	${RM} ${RMFLAGS} -r project
