@@ -38,6 +38,7 @@ void display_help() {
         "\t0 : left hand algorithm (default)\n"
         "\t1 : pledge algorithm\n"
         "\t2 : personnal algorithm\n"
+        "\t3 : comparison of the three algorithms\n"
         "\t9 : keyboard resolution\n"
         "\n"
       "-g mode : generate random maze\n"

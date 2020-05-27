@@ -200,7 +200,7 @@ void analyseOption(int argc, char *argv[]) {
                                         {0,         0,                 0,  0 }
   };
 
-  parameters.labName = "first_lab.fodaly"; //name of the maze
+  parameters.labName = ""; //name of the maze
   parameters.execName = argv[0]; //executable name
   parameters.display = 0; //display
   parameters.resolution = 0; //resolution
@@ -229,7 +229,7 @@ void analyseOption(int argc, char *argv[]) {
       if (optind < argc)
         parameters.labName = argv[optind];
       else
-        parameters.labName = "first_lab.fodaly";
+        parameters.labName = "";
       optind = 0;
       break;
     }
