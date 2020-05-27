@@ -25,6 +25,9 @@ project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LI
 generator: generation/generator.c
 	${CC} ${CFLAGSSHORT} generation/generator.c -o generator
 
+spliter: generation/spliter.c
+	${CC} ${CFLAGSSHORT} generation/spliter.c -o spliter
+
 main.o: main.c
 	${CC} ${CFLAGS} main.c
 
