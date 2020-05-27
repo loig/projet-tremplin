@@ -152,6 +152,8 @@ void displayParameters();
 */
 bool there_is_a_wall(Coordonnes coordinates, bool take_bound);
 
+bool is_outside_lab(Coordonnes coordinates);
+
 /**
 * \brief fill an array with the adjacents squares of a specific square
 * \param adjacentSquare, adjacentSquare the array to fill

@@ -509,7 +509,7 @@ void display_maze() {
   int maze_offset;
   int square_size_x;
   int square_size_y;
-  if (lab.sizeX>27 || lab.sizeY>27) {
+  if (lab.sizeX>12 || lab.sizeY>12) {
     square_size_x = 2;
     square_size_y = 1;
     placement_offset = 13;
@@ -600,13 +600,21 @@ void display_maze() {
         }
         attroff(COLOR_PAIR(CASE_VIDE));
       } else if (there_is_a_wall(actual_square,true)){
-        attron(COLOR_PAIR(CASE_PLEINE));
-        mvhline(ligne, coll, ' ', square_size_x);
-        for (int height = 0; height < square_size_y; height++) {
-          mvhline(ligne+height, coll, ' ', square_size_x);
-        }
-        attroff(COLOR_PAIR(CASE_PLEINE));
-
+          if (is_outside_lab(actual_square)) {
+            attron(COLOR_PAIR(CASE_NOIR));
+            mvhline(ligne, coll, ' ', square_size_x);
+            for (int height = 0; height < square_size_y; height++) {
+              mvhline(ligne+height, coll, ' ', square_size_x);
+            }
+            attroff(COLOR_PAIR(CASE_NOIR));
+          } else {
+            attron(COLOR_PAIR(CASE_PLEINE));
+            mvhline(ligne, coll, ' ', square_size_x);
+            for (int height = 0; height < square_size_y; height++) {
+              mvhline(ligne+height, coll, ' ', square_size_x);
+            }
+            attroff(COLOR_PAIR(CASE_PLEINE));
+          }
       }else if(player.coordinates.x == j && player.coordinates.y == i){
 
         char* orientation_char = "^>v<";

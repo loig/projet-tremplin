@@ -167,6 +167,15 @@ bool there_is_a_wall(Coordonnes coordinates, bool take_bound) {
   }
 }
 
+// true if the current coordinates are outside the
+// outer wall of the lab
+bool is_outside_lab(Coordonnes coordinates) {
+  return coordinates.x < - 1
+  || coordinates.y < - 1
+  || coordinates.x > lab.sizeX
+  || coordinates.y > lab.sizeY;
+}
+
 //--------------------------
 //maze generation
 //--------------------------
