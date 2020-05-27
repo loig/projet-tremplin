@@ -388,6 +388,9 @@ void keyboard_solve(WINDOW* window){
     case KEY_RIGHT:
       turn_right();
       break;
+    case 'q':
+      return;
+      break;
     }
       write_coord_terminal();
   }
@@ -398,7 +401,7 @@ void keyboard_solve(WINDOW* window){
 * \param window windows is the window where the modification will be made
 */
 void historic(WINDOW* window) {
-  if (parameters.display != 9){
+  if (parameters.display != 9 && parameters.resolution != 9){
     int cmp = 0;
     bool choice = false;
     int max = get_size_list_terminal()-1;
@@ -418,8 +421,10 @@ void historic(WINDOW* window) {
           cmp = 0;
         reprint_terminal_cursor(cmp);
         break;
-      default:
+      case 'q':
         choice = true;
+        break;
+      default:
         break;
       }
     }
