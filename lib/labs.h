@@ -38,9 +38,9 @@ bool is_solvable();
 // the current position of the player in the terminal.
 void write_coord_terminal();
 
-// print_terminal(s) displays the string s in the
+// write_terminal(s) displays the string s in the
 // terminal.
-void print_terminal(char* s);
+void write_terminal(char* s);
 
 // to be explained later
 void submit(bool);

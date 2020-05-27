@@ -538,7 +538,7 @@ void display_maze() {
       }
     }
   }else{
-    start_x = -1;
+    start_x = (lab.sizeX - maze_offset - 1)/2;
   }
 
   if(parameters.display || lab.sizeY>maze_offset){
@@ -552,7 +552,7 @@ void display_maze() {
       }
     }
   }else{
-    start_y = -1;
+    start_y = (lab.sizeY - maze_offset - 1)/2;
   }
 
   bool (*is_square_display_needed)(Coordonnes);
