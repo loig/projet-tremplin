@@ -436,17 +436,31 @@ void rand_gen(){
 * \param start, the entry coordinates to set.
 */
 void set_start_lab(Coordonnes start) {
+  if (there_is_a_wall(start,true)) {
+    printf("Starting position must not be under a wall\n");
+    exit(EXIT_FAILURE);
+  }
   lab.start = start;
-  lab.map[start.x][start.y] = 0;
+  lab.map[start.y][start.x] = 0;
 }
 
 /**
 * \brief set the arrival on the specific coordinates on the map.
 *        If set on a wall or a start, exit the program.
 * \param arrival, the exit coordinates to set.
+* \must be used after setting the start
 */
 void set_arrival_lab(Coordonnes arrival) {
+  if (there_is_a_wall(arrival,true)) {
+    printf("Arrival position must not be under a wall\n");
+    exit(EXIT_FAILURE);
+  }
+  if (lab.start.x == arrival.x && lab.start.y == arrival.y) {
+    printf("Arrival position must not be different from start position\n");
+    exit(EXIT_FAILURE);
+  }
   lab.arrival = arrival;
+  lab.map[arrival.y][arrival.x] = 0;
 }
 
 /**
@@ -490,20 +504,23 @@ bool is_solvable() {
 */
 void random_start(){
   Coordonnes square;
-  square.x = rand() % lab.sizeX;
-  square.y = rand() % lab.sizeY;
+  do {
+    square.x = rand() % lab.sizeX;
+    square.y = rand() % lab.sizeY;
+  } while (there_is_a_wall(square, true));
   set_start_lab(square);
 }
 
 /**
 * \brief set the arrival on random square of the map. Avoid wall and start.
+* \must be called after setting start position
 */
 void random_arrival(){
   Coordonnes square;
   do {
     square.x = rand() % lab.sizeX;
     square.y = rand() % lab.sizeY;
-  } while (square.x != start.x && square.y != start.y);
+  } while ((square.x == lab.start.x && square.y == lab.start.y) || there_is_a_wall(square, true));
   set_arrival_lab(square);
 }
 
@@ -515,8 +532,6 @@ void cooldown(int temps){
 * \brief set the maze with the parameters declared above.
 */
 void maze_initialization() {
-
-
 
   //Load labyrinth
   if (parameters.generation && parameters.contest == false) {
@@ -530,47 +545,42 @@ void maze_initialization() {
     load_map_lab();
   }
 
-  //set the default start
-  Coordonnes start = {0,0};
-  set_start_lab(start);
+  if (!parameters.contest) {
+    if (parameters.randomStart) {
+      random_start();
+    } else if (parameters.start.x > 0 && parameters.start.y > 0) {
+      set_start_lab(parameters.start);
+    } else {
+      //set the default start
+      Coordonnes start = {0,0};
+      set_start_lab(start);
+    }
 
-  //set the default arrival
-  Coordonnes arrival = {lab.sizeX-1,lab.sizeY-1};
-  set_arrival_lab(arrival);
-
-  if (parameters.randomStart) {
-    random_start();
-  }
-
-  if (parameters.randomArrival) {
-    random_arrival();
-  }
-
-  if (parameters.start.x > 0 && parameters.start.y > 0) {
-    set_start_lab(parameters.start);
-  }
-
-  if (parameters.arrival.x > 0 && parameters.arrival.y > 0) {
-    set_arrival_lab(parameters.arrival);
-  }
-
-  if (parameters.contest == true)
-  {
+    if (parameters.randomArrival) {
+      random_arrival();
+    } else if (parameters.arrival.x > 0 && parameters.arrival.y > 0) {
+      set_arrival_lab(parameters.arrival);
+    } else {
+      //set the default arrival
+      Coordonnes arrival = {lab.sizeX-1,lab.sizeY-1};
+      set_arrival_lab(arrival);
+    }
+  } else {
     if (parameters.resolution == 9){
       printf("You can't choose keyboard resolution with the contest mode\n");
       exit(EXIT_FAILURE);
-    }else{
-    parameters.speed = 0;
-    parameters.display = 9;
-    parameters.resolution = 0;
-    set_arrival_lab(arrival);
-    set_start_lab(start);
-    parameters.execName = "first_lab.fodaly";
+    } else {
+      parameters.speed = 0;
+      parameters.display = 9;
+      parameters.resolution = 0;
+      Coordonnes start = {0,0};
+      set_start_lab(start);
+      Coordonnes arrival = {lab.sizeX-1,lab.sizeY-1};
+      set_arrival_lab(arrival);
+      parameters.execName = "first_lab.fodaly";
     }
   }
 
-  lab.map[start.y][start.x] = 0;
-  lab.map[arrival.y][arrival.x] = 0;
 }
 
 /**
