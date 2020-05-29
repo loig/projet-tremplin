@@ -397,15 +397,6 @@ bool line_of_sight_view_square(Coordonnes actual_square){
   // always display the player
   if (player.coordinates.x == actual_square.x && player.coordinates.y == actual_square.y) {return true;}
 
-    int testX = 17;
-    int testY = 3;
-
-    if (actual_square.x == testX && actual_square.y == testY) {
-      char buf[150];
-      sprintf(buf, "Looking at square %d, %d", actual_square.x, actual_square.y);
-      print_terminal(buf);
-    }
-
     // directly visible
     if (bresenham(player.coordinates.x, player.coordinates.y, actual_square.x, actual_square.y)) {
       return true;
