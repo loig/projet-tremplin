@@ -696,7 +696,7 @@ void print_terminal(char* newStr){
   for (int i = LINES - 3; i >= offSetY; i--){
     mvprintw(i, offSetX, cleaner);
   }
-  for (int i = 0, j = LINES-3; i < size && j >= 3; i++, j--){
+  for (int i = 0, j = LINES-3; i <= size && j >= 3; i++, j--){
     mvprintw(j, offSetX, getListChar(&listTerminal, i));
   }
   refresh();

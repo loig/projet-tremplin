@@ -72,10 +72,9 @@ void pledge_algorithm() {
 }
 
 void personal_algorithm() {
-  write_terminal("Test\n");
+  write_coord_terminal();
   turn_left();
   turn_left();
-  while (true) {
-    move_forward();
-  }
+  move_forward();
+  write_coord_terminal();
 }

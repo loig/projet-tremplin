@@ -14,7 +14,7 @@
 #include <string.h>
 
 /**
- * \brief use to add a list to the current stack 
+ * \brief use to add a list to the current stack
  * \param list the current stack we want tu edit
  * \param str the string we want to add to the stack
  * \return 1
@@ -51,7 +51,7 @@ int addList(List* list, char* str){
 }
 
 /**
- * \brief use to add a string at the head of the stack 
+ * \brief use to add a string at the head of the stack
  * \param list the current stack we want tu edit
  * \param str the string we want to add to the stack
  * \return 1
@@ -78,19 +78,20 @@ int addHeadList(List* list, char* str){
  * \return a string begin at the head an finish to the index
 */
 char* getListChar(List* list, int index){
-  if (index >= list->size){
-    return NULL;
-  }else{
-    cellule *c = list->next;
-    for (int i = 0; i < index; i++){
-      c = c->next;
-    }
+  cellule *c = list->next;
+  int i = 0;
+  while (c != NULL && i < index) {
+    c = c->next;
+    i++;
+  }
+  if (c != NULL) {
     return c->txt;
   }
+  return NULL;
 }
 
 /**
- * \brief use to delete the head of a current stack 
+ * \brief use to delete the head of a current stack
  * \param list the current list we want to edit
 */
 void deleteHead(List *list){
