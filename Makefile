@@ -14,7 +14,7 @@ LIBDIR=lib/
 all: ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o
 	${CC} main.o ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o -o ${PROGRAM} -lncurses -lm
 
-project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o generator
+project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o generator enonce/enonce.pdf fodaly/rfc.pdf labs/first_lab.fodaly labs/second_lab.fodaly labs/third_lab.fodaly labs/g.fodaly
 	${MKDIR} -p project
 	${MKDIR} -p project/mail
 	${CP} enonce/enonce.pdf project/mail/enonce.pdf
@@ -29,6 +29,7 @@ project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LI
 	${MKDIR} -p project/ssh
 	${CP} labs/second_lab.fodaly project/ssh/second_lab.fodaly
 	${CP} labs/third_lab.fodaly project/ssh/third_lab.fodaly
+	${CP} labs/g.fodaly project/ssh/g.fodaly
 
 generator: generation/generator.c
 	${CC} ${CFLAGSSHORT} generation/generator.c -o generator
