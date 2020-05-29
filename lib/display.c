@@ -24,48 +24,53 @@ List listTerminal = {NULL, 0};
 int sizeCleaner = 0;
 
 void display_help() {
-    printf(""
-      "Usage : ./ProjetTremplin [option...] [labPath]\n"
-      "-d mode : change display mode\n"
-        "\t0 : classic display (default)\n"
-        "\t1 : 8 arround display\n"
-        "\t2 : front view display\n"
-        "\t3 : 8 arround + memory display\n"
-        "\t4 : line of sight display\n"
-        "\t9 : no display\n"
-        "\n"
-      "-a algorithm : change algorithm\n"
-        "\t0 : left hand algorithm (default)\n"
-        "\t1 : pledge algorithm\n"
-        "\t2 : personnal algorithm\n"
-        "\t3 : comparison of the three algorithms\n"
-        "\t9 : keyboard resolution\n"
-        "\n"
-      "-g mode : generate random maze\n"
-        "\t0 : no random generation, read maze from file (default)\n"
-        "\t1 : use randomly generated maze\n"
-        "\n"
-        "--xsize x : defines the size of the maze to generate\n"
-        "\n"
-        "--ysize y : defines the size of the mawe to generate\n"
-        "\n"
-      "--speed step : change speed execution\n"
-        "\t0 : no time between move\n"
-        "\t1 : 10ms time between move\n"
-        "\t2 : 100ms time between move\n"
-        "\t3 : 25ms time between move (default)\n"
-        "\tS : Sms time between move\n"
-        "\n"
-      "--start x,y : change start coordinate\n"
-      "\n"
-      "--arrival x,y : change arrival coordinate\n"
-      "\n"
-      "--start-random : change start coordinate randomly\n"
-      "\n"
-      "--arrival-random : change start coordinate randomly\n"
-      "\n"
-      "-h : display this help\n"
-    );
+  printf("Use %s -h for complete help\n", parameters.execName);
+}
+
+void display_man() {
+  printf("SYNOPSIS\n");
+  printf("       %s [OPTION]... MAZE\n", parameters.execName);
+  printf("       %s --g [OPTION]...\n", parameters.execName);
+  printf("\n");
+  printf("DESCRIPTION\n");
+  printf("       Display MAZE or a randomly generated maze.\n");
+  printf("\n");
+  printf("       -a ALGNUM\n");
+  printf("              choose the algorithm used to solve the maze. The value of ALGNUM indicates the algorithm to use: 0 for the left hand algorithm (default), 1 for the Pledge algorithm, 2 for a personal algorithm, 3 for comparing the three algorithms, and 9 for interactive keyboard solving.\n");
+  printf("\n");
+  printf("       --arrival X,Y\n");
+  printf("              set the coordinates of the arrival to (X,Y).\n");
+  printf("\n");
+  printf("       --arrival-random\n");
+  printf("              randomly set the coordinates of the arrival.\n");
+  printf("\n");
+  printf("       -d MODE\n");
+  printf("              choose the display mode. The value MODE indicates the mode to use: 0 for full display of the maze (default), 1 for displaying only the height positions around the player, 2 for display only the position in front of the player, 3 for drawing the maze while the player progresses, 4 for displaying only what the player can see, 9 for displaying nothing. All modes but 9 require that the current terminal supports coloring.\n");
+  printf("\n");
+  printf("       --g     randomly generate the maze instead of reading it from a file.\n");
+  printf("\n");
+  printf("       -h     display this help.\n");
+  printf("\n");
+  printf("       --speed STEP\n");
+  printf("              choose the time to spend between two moves of the player. The value STEP indicates the time to use: 0 for no time between moves, 1 for 10ms between moves, 2 for 100ms between moves, 3 for 25ms between moves (default), N for Nms between moves.\n");
+  printf("\n");
+  printf("       --start X,Y\n");
+  printf("              set the coordinates of the start to (X,Y).\n");
+  printf("\n");
+  printf("       --start-random\n");
+  printf("              randomly set the coordinates of the start.\n");
+  printf("\n");
+  printf("       --xsize N\n");
+  printf("              choose the size of the maze in the x direction (this option can only be used with the -g option).\n");
+  printf("\n");
+  printf("       --ysize N\n");
+  printf("              choose the size of the maze in the y direction (this option can only be used with the -g option).\n");
+  printf("\n");
+  printf("AUTHOR\n");
+  printf("        Written by Albert Guihard, Alexis Guillotin, Simon Perrin, and Loïg Jezequel.\n");
+  printf("\n");
+  printf("REPORTING BUGS\n");
+  printf("        loig.jezequel@univ-nantes.fr\n");
 }
 
 /**

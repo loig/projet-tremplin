@@ -26,9 +26,14 @@ WINDOW *window, *mazeWindow, *legende, *tableauDeBord, *terminal;
 
 
 /**
-* \brief Display the textual help usage of the program
+* \brief Display explanations on the textual help usage of the program
 */
 void display_help();
+
+/**
+* \brief Display the textual help usage of the program
+*/
+void display_man();
 
 /**
 * \brief Display legend in order for explanations on the color code of cells

@@ -197,6 +197,7 @@ void analyseOption(int argc, char *argv[]) {
                                         {"arrival",    required_argument, 0,  'z' }, //arrival set
                                         {"xsize", required_argument, 0, 'i'}, //size in x for gen
                                         {"ysize", required_argument, 0, 'j'}, //size in y for gen
+                                        {"g", no_argument, 0, 'g'}, //size in y for gen
                                         {0,         0,                 0,  0 }
   };
 
@@ -221,7 +222,7 @@ void analyseOption(int argc, char *argv[]) {
   int index_table;
   while (1) {
 
-    c = getopt_long(argc, argv, "a:d:g:h",long_options, &index_table);
+    c = getopt_long(argc, argv, "a:d:h",long_options, &index_table);
     char * end;
     int val;
 
@@ -263,12 +264,13 @@ void analyseOption(int argc, char *argv[]) {
       break;
 
     case 'g'://generation
+    /*
       val = (int)strtol(optarg,&end,10);
       if (strcmp(end,"")) {
         printf("Incorrect syntax\n");
         exit(0);
-      }
-      parameters.generation = val;
+      }*/
+      parameters.generation = 1;
       break;
 
       case 'i': //generation X size
@@ -290,7 +292,7 @@ void analyseOption(int argc, char *argv[]) {
       break;
 
     case 'h'://help
-      display_help();
+      display_man();
       exit(0);
       break;
 
