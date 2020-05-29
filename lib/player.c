@@ -58,19 +58,22 @@ bool is_move_forward_possible(){
 */
 void move_forward(){
   usleep(parameters.speed);
+  Coordonnes reached = {player.coordinates.x, player.coordinates.y};
+  if (player.orientation == NORTH) {
+    reached.y--;
+  }
+  if (player.orientation == EAST) {
+    reached.x++;
+  }
+  if (player.orientation == SOUTH) {
+    reached.y++;
+  }
+  if (player.orientation == WEST) {
+    reached.x--;
+  }
   if (is_move_forward_possible()) {
-    if (player.orientation == NORTH) {
-      player.coordinates.y--;
-    }
-    if (player.orientation == EAST) {
-      player.coordinates.x++;
-    }
-    if (player.orientation == SOUTH) {
-      player.coordinates.y++;
-    }
-    if (player.orientation == WEST) {
-      player.coordinates.x--;
-    }
+    player.coordinates.x = reached.x;
+    player.coordinates.y = reached.y;
     //player.course[player.coordinates.y][player.coordinates.x] = 1;
     player.nb_steps++;
     if(parameters.display != 9){
@@ -79,8 +82,27 @@ void move_forward(){
     }
     return;
   }
-  endwin();
-  printf("Moving to %d %d unauthorized\n",player.coordinates.y, player.coordinates.x);
+  if(parameters.display != 9){
+    char* s = calloc(100, sizeof(char));
+    sprintf(s, "Error while trying to move to (%d,%d), there is a wall here.\n", reached.x, reached.y);
+    write_terminal(s);
+    write_terminal("Press q to quit.\n");
+    keypad(window, TRUE);
+    bool done = false;
+    while(!done){
+      int c = wgetch(window);
+      switch(c){
+      case 'q':
+        done = true;
+        break;
+      default:
+        break;
+      }
+    }
+    endwin();
+  } else {
+  printf("Error while trying to move to (%d,%d), there is a wall here.\n", reached.x, reached.y);
+  }
   exit(1);
 }
 

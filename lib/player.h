@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "maze.h"
+#include "display.h"
 #include "player.h"
 
 /**
@@ -27,7 +28,7 @@ typedef enum Orientation {NORTH, EAST, SOUTH, WEST} Orientation;
 
 /**
  * \struct Player
- * \brief player describe the player situation in the labyrinthe. 
+ * \brief player describe the player situation in the labyrinthe.
  * coordinates contains the actual coordinates of the player.
  * orientation contains the actual orientation of the player, which can be between 0 to 3. (See Orientation struct above)
  * nb_steps contains the number of steps the player did since the begining of the algorithm.
@@ -41,7 +42,7 @@ typedef struct Player{
 } Player;
 
 /**
-* \brief global variable used by the function below. This use of a single variable allow 
+* \brief global variable used by the function below. This use of a single variable allow
 *        us to handle one player at time
 */
 Player player;

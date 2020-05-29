@@ -775,7 +775,7 @@ void displayInitialization () {
       printw("The terminal window is not large enough to have a correct display.\nPlease enlarge it, please.\nCurrent size: %d lines, %d columns.\nMinimum size required: 45 lines, 94 columns.", LINES, COLS);
       getch();
       endwin();
-      exit(1);
+      exit(EXIT_FAILURE);
     }
 
     /**Color initialization
@@ -817,10 +817,10 @@ void displayInitialization () {
     mvwprintw(terminal, 0, 1, "Terminal");
 
     if(has_colors() == FALSE){
-      printf("Your terminal does not support color.\n");
+      printf("Error: Your terminal does not support color.\n");
       getch();
       endwin();
-      exit(1);
+      exit(EXIT_FAILURE);
     }
     display_legende(2, yDebutTableauDeBord);
     display_dashboard();

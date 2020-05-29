@@ -31,9 +31,9 @@ void size_map_lab() {
   fichier = fopen(parameters.labName, "r");
 
   if (fichier == NULL) {
-    printf("With the options you used, you must specify a fodaly file\n");
+    printf("Error: With the options you used, you must specify a fodaly file\n");
     display_help();
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 
   int caractereActuel = 0;
@@ -48,7 +48,7 @@ void size_map_lab() {
     caractereActuel = fgetc(fichier); // read character
 
     if (caractereActuel != '0' && caractereActuel != '1' && caractereActuel != '\n' && caractereActuel != EOF) {
-      printf("Bad character in the maze definition\n");
+      printf("Error: Forbiden character in the maze file (only 0 and 1 are provide)\n");
       exit(EXIT_FAILURE);
     }
 
@@ -61,8 +61,8 @@ void size_map_lab() {
     if (caractereActuel == '\n' && x==0) {
       colonX += tmpx;  //we make a line break with the sector
       if (y != nbMaxLine) {
-        printf("y = %d nbMaxLine = %d\n", y,nbMaxLine);
-        printf("Wrong number of lines in this block\n");
+        //printf("y = %d nbMaxLine = %d\n", y,nbMaxLine);
+        printf("Error: Wrong number of lines in a block of the maze file (all blocks separated by blank lines must have the same number of lines)\n");
         exit(EXIT_FAILURE);
       }
       nbMaxColon=0;
@@ -79,7 +79,7 @@ void size_map_lab() {
       }
       tmpx=x;
       if (x != nbMaxColon) {
-        printf("Wrong column number in this block\n");
+        printf("Error: Wrong number of columns in a block of the maze file (any block with no blank lines must have the same number of columns in each of its lines)\n");
         exit(EXIT_FAILURE);
       }
       x=0; //Line break
@@ -109,9 +109,9 @@ void load_map_lab() {
 
 
   if (fichier == NULL) {
-    printf("With the options you used, you must specify a fodaly file\n");
+    printf("Error: With the options you used, you must specify a fodaly file\n");
     display_help();
-    exit(1);
+    exit(EXIT_FAILURE);
   }
 
   int caractereActuel = 0;
@@ -462,7 +462,7 @@ void rand_gen(){
 */
 void set_start_lab(Coordonnes start) {
   if (there_is_a_wall(start,true)) {
-    printf("Starting position must not be under a wall\n");
+    printf("Error: The starting position must not be under a wall\n");
     exit(EXIT_FAILURE);
   }
   lab.start = start;
@@ -477,11 +477,11 @@ void set_start_lab(Coordonnes start) {
 */
 void set_arrival_lab(Coordonnes arrival) {
   if (there_is_a_wall(arrival,true)) {
-    printf("Arrival position must not be under a wall\n");
+    printf("Error: The arrival position must not be under a wall\n");
     exit(EXIT_FAILURE);
   }
   if (lab.start.x == arrival.x && lab.start.y == arrival.y) {
-    printf("Arrival position must not be different from start position\n");
+    printf("Error: The arrival position must be different from the start position\n");
     exit(EXIT_FAILURE);
   }
   lab.arrival = arrival;
@@ -592,7 +592,7 @@ void maze_initialization() {
     }
   } else {
     if (parameters.resolution == 9){
-      printf("You can't choose keyboard resolution with the contest mode\n");
+      printf("Error: You can't choose keyboard resolution with the contest mode\n");
       exit(EXIT_FAILURE);
     } else {
       parameters.speed = 0;
