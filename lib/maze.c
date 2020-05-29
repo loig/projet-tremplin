@@ -272,6 +272,31 @@ void roots_set_by_probability(SetQueue* setqueue) {
       if (there_is_a_wall(racine,true))
         valide = false;
 
+      // check that a wall is not set-up on the
+      // start or the arrival
+      if (!parameters.randomStart) {
+        if (parameters.start.x > 0 && parameters.start.y > 0) {
+          if (parameters.start.x == racine.x && parameters.start.y == racine.y) {
+            valide = false;
+          }
+        } else {
+          if (racine.x == 0 && racine.y == 0) {
+            valide = false;
+          }
+        }
+      }
+      if (!parameters.randomArrival) {
+        if (parameters.arrival.x > 0 && parameters.arrival.y > 0) {
+          if (parameters.arrival.x == racine.x && parameters.arrival.y == racine.y) {
+            valide = false;
+          }
+        } else {
+          if (racine.x == lab.sizeX-1 && racine.y == lab.sizeY-1) {
+            valide = false;
+          }
+        }
+      }
+
       int nbWall = 0;
       for (int j = 0; j < 8; j++) {
 
@@ -534,7 +559,7 @@ void cooldown(int temps){
 void maze_initialization() {
 
   //Load labyrinth
-  if (parameters.generation && parameters.contest == false) {
+  if (parameters.generation && !parameters.contest) {
     lab.sizeX = parameters.genSizeX;
     lab.sizeY = parameters.genSizeY;
     generate_map_lab(parameters.generation);
