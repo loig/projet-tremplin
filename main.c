@@ -20,9 +20,9 @@
 #include <getopt.h>
 #include <ctype.h> //isdigit
 #include <string.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
 #include <math.h>
 
 #define T true
@@ -96,6 +96,7 @@ void get_maze_hash(char hash[100]){
   hash[char_count] = '\n';
 }
 
+/*
 void submit(bool solvable){
   endwin();
   const char* json_model = "{\"student\": \"%s\", \"solve\": %d, \"count\": %d, \"status\": %d, \"orientateR\": %d, \"orientateL\": %d, \"time\": %f}\n";
@@ -180,6 +181,7 @@ void submit(bool solvable){
   close(sock);
   sleep(1);
 }
+*/
 
 /**
 * \brief analyse all the option gived with the execution, and set the parameter struct with these

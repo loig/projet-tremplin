@@ -32,10 +32,10 @@ void lefthand_algorithm() {
       write_coord_terminal();
     }
     write_terminal("Arrival reached !!!");
-    //submit(true);
+    submit(true);
   }else{
     write_terminal("No solution was found");
-    //submit(false);
+    submit(false);
   }
 }
 

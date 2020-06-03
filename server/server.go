@@ -156,6 +156,7 @@ func initializeStudentsMapFromFile(fileName string) {
 	log.Print("Ending students map initialization")
 }
 
+// creat a new student from her name
 func newStudent(name string) student {
 	var theStudent student
 	theStudent.labHash = "test"

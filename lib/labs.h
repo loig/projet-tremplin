@@ -43,4 +43,4 @@ void write_coord_terminal();
 void write_terminal(char* s);
 
 // to be explained later
-void submit(bool);
+int submit(bool solvable);

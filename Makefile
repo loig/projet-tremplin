@@ -11,15 +11,15 @@ RMFLAGS=-fv
 LIBDIR=lib/
 
 
-all: ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o
-	${CC} main.o ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o -o ${PROGRAM} -lncurses -lm
+all: ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o ${LIBDIR}submit.o main.o
+	${CC} main.o ${LIBDIR}maze.o ${LIBDIR}mazeResolution.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o ${LIBDIR}submit.o -o ${PROGRAM} -lncurses -lm
 
-project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o generator enonce/enonce.pdf fodaly/rfc.pdf labs/first_lab.fodaly labs/second_lab.fodaly labs/third_lab.fodaly labs/g.fodaly
+project: ${LIBDIR}labs.h ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o ${LIBDIR}submit.o main.o generator enonce/enonce.pdf fodaly/rfc.pdf labs/first_lab.fodaly labs/second_lab.fodaly labs/third_lab.fodaly labs/g.fodaly
 	${MKDIR} -p project
 	${MKDIR} -p project/mail
 	${CP} enonce/enonce.pdf project/mail/enonce.pdf
 	${MKDIR} -p project/madoc1
-	${LINK} -r ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o main.o -o project/madoc1/labs.o
+	${LINK} -r ${LIBDIR}maze.o ${LIBDIR}queue.o ${LIBDIR}player.o ${LIBDIR}stack.o ${LIBDIR}display.o ${LIBDIR}submit.o main.o -o project/madoc1/labs.o
 	${CP} ${LIBDIR}labs.h project/madoc1/labs.h
 	scripts/simplify.sh ${LIBDIR}mazeResolution.c project/madoc1/mazeResolution.c
 	${CP} generator project/madoc1/generator
@@ -57,6 +57,9 @@ stack.o: ${LIBDIR}stack.c ${LIBDIR}stack.h
 
 display.o: ${LIBDIR}display.c ${LIBDIR}display.h
 	${CC} ${CFLAGS} ${LIBDIR}display.c
+
+submit.o: ${LIBDIR}submit.c ${LIBDIR}submit.h
+	${CC} ${CFLAGS} ${LIBDIR}submit.c
 
 clean:
 	${RM} ${RMFLAGS} ${PROGRAM}
