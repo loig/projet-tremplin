@@ -61,6 +61,7 @@ int addHeadList(List* list, char* str){
   list->next = (cellule*) malloc(sizeof(cellule));
   int size = 0;
   for (; str[size] != '\0'; size++);
+  size++;
 
   list->next->txt = (char*) malloc(sizeof(char) * size);
   memset(list->next->txt, 0, sizeof(char) * size);

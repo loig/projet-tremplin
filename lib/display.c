@@ -721,11 +721,7 @@ void write_coord_terminal(){
   int xPlayer = player.coordinates.x;
   int yPlayer = player.coordinates.y;
   sprintf(str, "x: %d|y: %d", xPlayer, yPlayer);
-  if(parameters.display != 9)
-    print_terminal(str);
-  else
-    printf("%s\n", str);
-
+  write_terminal(str);
 }
 
 /**
