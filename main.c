@@ -436,45 +436,67 @@ void historic(WINDOW* window) {
 
 void comparaison(){
   //Left_hand algorithm
+  write_terminal("Starting left hand algorithm");
   double time_left = 0;
   timeStart = clock();
   lefthand_algorithm();
+  bool reached_left = arrival_reached();
+  int steps_left = player.nb_steps;
+  int rotateLeft_left = player.nb_orientate_left;
+  int rotateRight_left = player.nb_orientate_right;
   time_left = (double) (clock()-timeStart)/CLOCKS_PER_SEC;
 
   //Pledge algorithm
+  write_terminal("Starting Pledge algorithm");
   double time_pledge = 0;
   maze_initialization();
   set_player();
   displayInitialization();
   timeStart = clock();
   pledge_algorithm();
+  bool reached_pledge = arrival_reached();
+  int steps_pledge = player.nb_steps;
+  int rotateLeft_pledge = player.nb_orientate_left;
+  int rotateRight_pledge = player.nb_orientate_right;
   time_pledge = (double) (clock()-timeStart)/CLOCKS_PER_SEC;
 
   //Personnal algorithm
+  write_terminal("Starting personnal algorithm");
   double time_perso = 0;
   maze_initialization();
   set_player();
   displayInitialization();
   timeStart = clock();
   personal_algorithm();
+  bool reached_perso = arrival_reached();
+  int steps_perso = player.nb_steps;
+  int rotateLeft_perso = player.nb_orientate_left;
+  int rotateRight_perso = player.nb_orientate_right;
   time_perso = (double) (clock()-timeStart)/CLOCKS_PER_SEC;
 
   //display results
-  char str_left[50] = {'\0'};
-  char str_pledge[50] = {'\0'};
-  char str_perso[50] = {'\0'};
-  sprintf(str_left, "temps left_hand : %f s",time_left);
-  sprintf(str_pledge,"temps pledge : %f s",time_pledge);
-  sprintf(str_perso,"temps personnal : %f s",time_perso);
-  if (parameters.display != 9){
-    print_terminal(str_left);
-    print_terminal(str_pledge);
-    print_terminal(str_perso);
-  }else{
-    printf("%s\n",str_left);
-    printf("%s\n",str_pledge);
-    printf("%s\n",str_perso);
+  char str_left[100];
+  char str_pledge[100];
+  char str_perso[100];
+  if (reached_left) {
+    sprintf(str_left, "Left hand algorithm: %fs, %d steps, %d left tuns, %d right turns", time_left, steps_left, rotateLeft_left, rotateRight_left);
+  } else {
+    sprintf(str_left, "Left hand algorithm: arrival not reached");
   }
+  if (reached_pledge) {
+    sprintf(str_pledge, "Pledge algorithm: %fs, %d steps, %d left tuns, %d right turns",time_pledge, steps_pledge, rotateLeft_pledge, rotateRight_pledge);
+  } else {
+    sprintf(str_pledge, "Pledge algorithm: arrival not reached");
+  }
+  if (reached_perso) {
+    sprintf(str_perso, "Personnal algorithm: %fs, %d steps, %d left tuns, %d right turns",time_perso, steps_perso, rotateLeft_perso, rotateRight_perso);
+  } else {
+    sprintf(str_perso, "Personnal algorithm: arrival not reached");
+  }
+
+  write_terminal(str_left);
+  write_terminal(str_pledge);
+  write_terminal(str_perso);
 }
 
 /**

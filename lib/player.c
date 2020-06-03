@@ -23,6 +23,9 @@ void set_player() {
   player.coordinates.x = lab.start.x;
   player.coordinates.y = lab.start.y;
   player.orientation = NORTH;
+  player.nb_steps = 0;
+  player.nb_orientate_left = 0;
+  player.nb_orientate_right = 0;
 }
 
 /**
