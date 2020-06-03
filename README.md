@@ -16,6 +16,7 @@ Cette nouvelle version du projet est basée sur le travail de Albert Guihard, Al
 * fodaly/, l'explication du format de description des labyrinthes
 * generation/, les outils de génération de labyrinthes
 * scripts/, des scripts utiles pour générer la version étudiant du projet
+* server/, le serveur pour le concours
 
 ## Quelques notes sur le Makefile
 
