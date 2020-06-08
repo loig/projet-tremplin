@@ -197,8 +197,8 @@ func newStudent(name string) student {
 
 // get the next lab hash from a lab hash
 func getNextLab(labHash string) string {
-	upLeft := 0
-	bottomRight := 0
+	upLeft := rand.Intn(32768)          // no wall on uper left position (start)
+	bottomRight := 2 * rand.Intn(32768) // no wall on bottom right position (goal)
 	return fmt.Sprint(
 		upLeft, ":", rand.Intn(65536), ":", rand.Intn(65536), ":",
 		rand.Intn(65536), ":", rand.Intn(65536), ":", rand.Intn(65536), ":",
