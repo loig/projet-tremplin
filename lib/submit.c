@@ -1,10 +1,35 @@
 #include "submit.h"
 
-// Soumission d'un résultat
-int submit(bool solvable) {
+// Calcul du hash d'un labyrinthe
+void get_maze_hash(char* hash){
 
-  char* id = "test-test";
-  char* server = "127.0.0.1";
+  if (lab.sizeX != 12 || lab.sizeY != 12) {
+    strcpy(hash, "wrongLab");
+    return;
+  }
+
+  int elements[9];
+  int elem = 0;
+
+  for (int pady = 0; pady < 12; pady += 4) {
+    for (int padx = 0; padx < 12; padx += 4) {
+      printf("working on elements[%d]\n", elem);
+      elements[elem] = 0;
+      for (int y = pady; y < pady + 4; y++) {
+        for (int x = padx; x < padx + 4; x++) {
+          elements[elem] = 2 * elements[elem] + lab.map[y][x];
+        }
+      }
+      elem++;
+    }
+  }
+
+  sprintf(hash, "%d:%d:%d:%d:%d:%d:%d:%d:%d", elements[0], elements[1], elements[2], elements[3], elements[4], elements[5], elements[6], elements[7], elements[8]);
+
+}
+
+// Soumission d'un résultat
+int submit(char* id, char* server, bool solvable) {
 
   // Vérification que le résultat est correct
   //   - si le labyrinthe est soluble, il faut que la position courante soit à l'arrivée et solvable à vrai
@@ -26,7 +51,9 @@ int submit(bool solvable) {
   }
 
   // Calcul du hash courant
-  char* currentHash = "test";
+  char* currentHash = (char*)calloc(54, sizeof(char));
+  get_maze_hash(currentHash);
+  //printf("Hash: %s\n", currentHash);
 
   // Communication avec le serveur
   char* message = (char*)calloc(300, sizeof(char));
@@ -64,6 +91,7 @@ int submit(bool solvable) {
     exit(0);
   }
 
+  // Lecture de la réponse du serveur
   memset(buffer,0,256);
   n = read(sockfd,buffer,255);
   if (n < 0) {
@@ -71,19 +99,21 @@ int submit(bool solvable) {
     exit(0);
   }
 
-  close(sockfd);
-
-  int toReturn = 0;
-  switch (buffer[0]) {
-  default:
-    toReturn = -1;
+  if (n < 19) {
+    fprintf(stderr,"WRONG message from server");
+    exit(0);
   }
 
-  // On attend un peu pour ne pas surcharger le serveur
+  close(sockfd);
 
+  // Return code from the server
+  int toReturn = buffer[0] - 48;
+
+  // On attend un peu pour ne pas surcharger le serveur
   sleep(1);
 
   // On affiche le prochain labyrinthe à résoudre
+  printf("Next maze: %s\n", &buffer[2]);
 
   return toReturn;
 

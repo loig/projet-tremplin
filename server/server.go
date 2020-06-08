@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net"
 	"os"
 	"strings"
@@ -19,6 +20,15 @@ import (
 // * récupérer stats : temps, nb mouvements
 // * réponse du serveur à l'étudiant qui soumet un message
 
+// return codes
+const (
+	everythingOk int = iota
+	receptionError
+	wrongMessage
+	unknownStudent
+	wrongLab
+)
+
 type student struct {
 	labHash   string // hash of the lab that has to be solved
 	numTried  int    // number of labs that the student tried to solve
@@ -29,7 +39,17 @@ var students map[string]student
 var studentsMutex sync.Mutex
 var isFresh bool
 
+const (
+	firstLab = "0:0:0:0:0:0:0:0:0"
+	seed     = 0
+)
+
 func init() {
+
+	rand.Seed(seed)
+
+	log.Print("Error codes are ", everythingOk, ", ", receptionError, ", ", wrongMessage, ", ", unknownStudent, ", ", wrongLab)
+
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [-new|-h] studentsList\n", os.Args[0])
 		flag.PrintDefaults()
@@ -75,13 +95,14 @@ func main() {
 // handle a request from a student
 func handleConnexion(conn net.Conn) {
 	log.Print("Starting interaction with ", conn.RemoteAddr())
-	defer log.Print("Ending interaction with", conn.RemoteAddr())
+	defer log.Print("Ending interaction with ", conn.RemoteAddr())
 
 	// read information sent by student
 	reader := bufio.NewReader(conn)
 	msg, err := reader.ReadString('\n')
 	if err != nil {
 		log.Print(conn.RemoteAddr(), " Error in message reception: ", err)
+		sendInfo(receptionError, conn, student{})
 		return
 	}
 
@@ -89,6 +110,7 @@ func handleConnexion(conn net.Conn) {
 	splitMsg := strings.Split(msg, ":::")
 	if len(splitMsg) < 3 {
 		log.Print(conn.RemoteAddr(), " Wrong message received: ", msg)
+		sendInfo(wrongMessage, conn, student{})
 		return
 	}
 
@@ -100,6 +122,7 @@ func handleConnexion(conn net.Conn) {
 	studentsMutex.Unlock()
 	if !found {
 		log.Print(conn.RemoteAddr(), " This student does not exist: ", studentID)
+		sendInfo(unknownStudent, conn, studentInfo)
 		return
 	}
 	log.Print(conn.RemoteAddr(), " is ", studentID)
@@ -109,7 +132,8 @@ func handleConnexion(conn net.Conn) {
 	// request to student
 	labHash := splitMsg[1]
 	if labHash != studentInfo.labHash {
-		log.Print(conn.RemoteAddr(), " Wrong lab solved: ", labHash, " instead of ", studentInfo.labHash)
+		log.Print(conn.RemoteAddr(), " Wrong lab solved: '", labHash, "' instead of '", studentInfo.labHash, "'")
+		sendInfo(wrongLab, conn, studentInfo)
 		return
 	}
 	// the student tried one more lab
@@ -129,10 +153,18 @@ func handleConnexion(conn net.Conn) {
 	}
 	log.Print(conn.RemoteAddr(), " Number of solved by ", studentID, " is now ", studentInfo.numSolved)
 
+	// get next lab
+	log.Print(conn.RemoteAddr(), " had to solve ", studentInfo.labHash)
+	studentInfo.labHash = getNextLab(studentInfo.labHash)
+	log.Print(conn.RemoteAddr(), " must now solve ", studentInfo.labHash)
+
 	// update the students map
 	studentsMutex.Lock()
 	students[studentID] = studentInfo
 	studentsMutex.Unlock()
+
+	// say everything is ok to the student
+	sendInfo(everythingOk, conn, studentInfo)
 
 	return
 }
@@ -156,9 +188,29 @@ func initializeStudentsMapFromFile(fileName string) {
 	log.Print("Ending students map initialization")
 }
 
-// creat a new student from her name
+// create a new student from her name
 func newStudent(name string) student {
 	var theStudent student
-	theStudent.labHash = "test"
+	theStudent.labHash = firstLab
 	return theStudent
+}
+
+// get the next lab hash from a lab hash
+func getNextLab(labHash string) string {
+	upLeft := 0
+	bottomRight := 0
+	return fmt.Sprint(
+		upLeft, ":", rand.Intn(65536), ":", rand.Intn(65536), ":",
+		rand.Intn(65536), ":", rand.Intn(65536), ":", rand.Intn(65536), ":",
+		rand.Intn(65536), ":", rand.Intn(65536), ":", bottomRight,
+	)
+}
+
+// send information to a student
+func sendInfo(code int, conn net.Conn, studentInfo student) {
+	writer := bufio.NewWriter(conn)
+	log.Print(conn.RemoteAddr(), " Sending code ", code)
+	writer.WriteString(fmt.Sprint(code, ":"))
+	writer.WriteString(studentInfo.labHash)
+	writer.Flush()
 }

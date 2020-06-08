@@ -73,6 +73,7 @@ int hexa_to_int(char to_convert){
   }
 }
 
+/*
 void get_maze_hash(char hash[100]){
   hash[0] = '.';
   int char_count = 0;
@@ -95,6 +96,7 @@ void get_maze_hash(char hash[100]){
   }
   hash[char_count] = '\n';
 }
+*/
 
 /*
 void submit(bool solvable){

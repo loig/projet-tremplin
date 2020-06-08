@@ -32,10 +32,10 @@ void lefthand_algorithm() {
       write_coord_terminal();
     }
     write_terminal("Arrival reached !!!");
-    submit(true);
+    submit("test-test", "127.0.0.1", true);
   }else{
     write_terminal("No solution was found");
-    submit(false);
+    submit("test-test", "127.0.0.1", false);
   }
 }
 
