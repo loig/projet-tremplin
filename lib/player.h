@@ -18,6 +18,7 @@
 #include "maze.h"
 #include "display.h"
 #include "player.h"
+#include "errors.h"
 
 /**
 * \enum Orientation

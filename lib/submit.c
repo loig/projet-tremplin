@@ -68,41 +68,35 @@ int submit(bool solvable) {
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-      fprintf(stderr,"ERROR opening socket");
-      exit(0);
+      handleFatalError("ERROR opening communication socket, check the server address you used", true, false);
     }
 
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     int addr_ok = inet_aton(parameters.serverAdress, &serv_addr.sin_addr);
     if (!addr_ok) {
-      fprintf(stderr,"ERROR, invalid address\n");
-      exit(0);
+      handleFatalError("ERROR, invalid address, check the server address you used", true, false);
     }
     serv_addr.sin_port = htons(portno);
 
     if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) {
-      fprintf(stderr,"ERROR connecting");
-      exit(0);
+      handleFatalError("ERROR connecting, check the server address you used", true, false);
     }
 
     n = write(sockfd,message,strlen(message));
     if (n < 0) {
-      fprintf(stderr,"ERROR writing to socket");
-      exit(0);
+      handleFatalError("ERROR writing to socket, try again a few times, then call a teacher", true, false);
     }
 
     // Lecture de la réponse du serveur
     memset(buffer,0,256);
     n = read(sockfd,buffer,255);
     if (n < 0) {
-      fprintf(stderr,"ERROR reading from socket");
-      exit(0);
+      handleFatalError("ERROR reading from socket, try again a few times, then call a teacher", true, false);
     }
 
     if (n < 19) {
-      fprintf(stderr,"WRONG message from server");
-      exit(0);
+      handleFatalError("ERROR, wrong message received from server, that's not expected, call a teacher", true, false);
     }
 
     close(sockfd);

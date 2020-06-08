@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include <time.h>
 #include "queue.h"
+#include "errors.h"
+#include "display.h"
 
 /**
  * \struct maze

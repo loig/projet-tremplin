@@ -245,17 +245,15 @@ void analyseOption(int argc, char *argv[]) {
     case 'd'://display mode
     val = (int)strtol(optarg,&end,10);
     if (strcmp(end,"")) {
-      printf("Incorrect syntax\n");
-      exit(0);
+      handleFatalError("Incorrect syntax in -d option", false, true);
     }
     parameters.display = val;
       break;
 
-      case 'a'://display mode
+      case 'a'://algorithm choice
       val = (int)strtol(optarg,&end,10);
       if (strcmp(end,"")) {
-        printf("Incorrect syntax\n");
-        exit(0);
+        handleFatalError("Incorrect syntax in -a option", false, true);
       }
       parameters.resolution = val;
         break;
@@ -263,8 +261,7 @@ void analyseOption(int argc, char *argv[]) {
     case 'v'://verbose mode
       val = (int)strtol(optarg,&end,10);
       if (strcmp(end,"")) {
-        printf("Incorrect syntax\n");
-        exit(0);
+        handleFatalError("Incorrect syntax in -v option", false, true);
       }
       parameters.verbose = val;
       break;
@@ -282,8 +279,7 @@ void analyseOption(int argc, char *argv[]) {
       case 'i': //generation X size
       val = (int)strtol(optarg,&end,10);
       if (strcmp(end,"")) {
-        printf("Incorrect syntax\n");
-        exit(0);
+        handleFatalError("Incorrect syntax in --xsize option", false, true);
       }
       parameters.genSizeX = val;
       break;
@@ -291,8 +287,7 @@ void analyseOption(int argc, char *argv[]) {
       case 'j': //generation Y size
       val = (int)strtol(optarg,&end,10);
       if (strcmp(end,"")) {
-        printf("Incorrect syntax\n");
-        exit(0);
+        handleFatalError("Incorrect syntax in --ysize option", false, true);
       }
       parameters.genSizeY = val;
       break;
@@ -305,8 +300,7 @@ void analyseOption(int argc, char *argv[]) {
     case 't'://change speed
       val = (int)strtol(optarg,&end,10);
       if (strcmp(end,"")) {
-        printf("Incorrect syntax\n");
-        exit(0);
+        handleFatalError("Incorrect syntax in --speed option", false, true);
       }
       switch (val) {
       case 0:
@@ -333,18 +327,14 @@ void analyseOption(int argc, char *argv[]) {
       for (int i = 0; optarg[i] != '@'; i++) {
         userNameLength++;
         if (optarg[i]=='\0') {
-          printf("Error: For contest mode you must give a server adress\n");
-          display_help();
-          exit(EXIT_FAILURE);
+          handleFatalError("Error: For contest mode you must give a server adress", false, true);
         }
       }
       parameters.userName = calloc(userNameLength + 1, sizeof(char));
       strncpy(parameters.userName, optarg, userNameLength);
       parameters.userName[userNameLength] = '\0';
       if (optarg[userNameLength+1] == '\0') {
-        printf("Error: For contest mode you must give a non empty server adress\n");
-        display_help();
-        exit(EXIT_FAILURE);
+        handleFatalError("Error: For contest mode you must give a non empty server adress", false, true);
       }
       parameters.serverAdress = calloc(strlen(optarg) - userNameLength, sizeof(char));
       strcpy(parameters.serverAdress, &optarg[userNameLength+1]);
@@ -362,15 +352,13 @@ void analyseOption(int argc, char *argv[]) {
       //recovery of the first value
       val = (int)strtol(optarg,&end,10);
       if (end[0] != ',') {
-        printf("Incorrect syntax\n");
-        exit(0);
+        handleFatalError("Incorrect syntax in --start option", false, true);
       }
       parameters.start.x = val;
       //recovery of the second value
       val = (int)strtol(&(end[1]),&end,10);
       if (end[0] != '\0') {
-        printf("Incorrect syntax\n");
-        exit(0);
+        handleFatalError("Incorrect syntax in --start option", false, true);
       }
       parameters.start.y = val;
       break;
@@ -379,15 +367,13 @@ void analyseOption(int argc, char *argv[]) {
     //recovery of the first value
     val = (int)strtol(optarg,&end,10);
     if (end[0] != ',') {
-      printf("Incorrect syntax\n");
-      exit(0);
+      handleFatalError("Incorrect syntax in --arrival option", false, true);
     }
     parameters.arrival.x = val;
     //recovery of the second value
     val = (int)strtol(&(end[1]),&end,10);
     if (end[0] != '\0') {
-      printf("Incorrect syntax\n");
-      exit(0);
+      handleFatalError("Incorrect syntax in --arrival option", false, true);
     }
     parameters.arrival.y = val;
       break;
@@ -395,9 +381,7 @@ void analyseOption(int argc, char *argv[]) {
   }
 
   if (parameters.contest && parameters.resolution == 3) {
-        printf("Error: Cannot compare algorithms in contest situation\n");
-        display_help();
-        exit(EXIT_FAILURE);
+    handleFatalError("Error: Cannot compare algorithms in contest situation\n", false, true);
   }
 }
 

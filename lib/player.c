@@ -85,28 +85,9 @@ void move_forward(){
     }
     return;
   }
-  if(parameters.display != 9){
-    char* s = calloc(100, sizeof(char));
-    sprintf(s, "Error while trying to move to (%d,%d), there is a wall here.\n", reached.x, reached.y);
-    write_terminal(s);
-    write_terminal("Press q to quit.\n");
-    keypad(window, TRUE);
-    bool done = false;
-    while(!done){
-      int c = wgetch(window);
-      switch(c){
-      case 'q':
-        done = true;
-        break;
-      default:
-        break;
-      }
-    }
-    endwin();
-  } else {
-  printf("Error while trying to move to (%d,%d), there is a wall here.\n", reached.x, reached.y);
-  }
-  exit(1);
+  char* s = calloc(100, sizeof(char));
+  sprintf(s, "Error while trying to move to (%d,%d), there is a wall here.", reached.x, reached.y);
+  handleFatalError(s, true, false);
 }
 
 /**

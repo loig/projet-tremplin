@@ -21,6 +21,7 @@
 #include "stack.h"
 #include "maze.h"
 #include "player.h"
+#include "errors.h"
 
 WINDOW *window, *mazeWindow, *legende, *tableauDeBord, *terminal;
 
