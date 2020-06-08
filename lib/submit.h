@@ -7,4 +7,4 @@
 #include "maze.h"
 #include "player.h"
 
-int submit(char* id, char* server, bool solvable);
+int submit(bool solvable);

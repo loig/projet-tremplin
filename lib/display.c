@@ -44,6 +44,9 @@ void display_man() {
   printf("       --arrival-random\n");
   printf("              randomly set the coordinates of the arrival.\n");
   printf("\n");
+  printf("       --contest USER@SERVER\n");
+  printf("              participate to the contest as USER and sending your results to SERVER. During contest, MODE=3 is not valid.\n");
+  printf("\n");
   printf("       -d MODE\n");
   printf("              choose the display mode. The value MODE indicates the mode to use: 0 for full display of the maze (default), 1 for displaying only the height positions around the player, 2 for display only the position in front of the player, 3 for drawing the maze while the player progresses, 4 for displaying only what the player can see, 9 for displaying nothing. All modes but 9 require that the current terminal supports coloring.\n");
   printf("\n");
