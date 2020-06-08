@@ -95,20 +95,32 @@ int submit(bool solvable) {
       handleFatalError("ERROR reading from socket, try again a few times, then call a teacher", true, false);
     }
 
-    if (n < 19) {
+    if (n < 2) {
+      handleFatalError("ERROR, wrong message received from server, that's not expected, call a teacher", true, false);
+    }
+
+    // Return code from the server
+    int toReturn = buffer[0] - 48;
+
+    if (toReturn < 2 && n < 19) {
       handleFatalError("ERROR, wrong message received from server, that's not expected, call a teacher", true, false);
     }
 
     close(sockfd);
 
-    // Return code from the server
-    int toReturn = buffer[0] - 48;
 
     // On attend un peu pour ne pas surcharger le serveur
     sleep(1);
 
-    // On affiche le prochain labyrinthe à résoudre
-    printf("Next maze: %s\n", &buffer[2]);
+    // On affiche le prochain labyrinthe à résoudre quand c'est possible
+    if (toReturn < 2) {
+      int len = strlen(&buffer[2]);
+      char* s = calloc(len + 13, sizeof(char));
+      sprintf(s,"Next maze: %s", &buffer[2]);
+      write_terminal(s);
+    } else {
+      write_terminal("Next maze: ???:???:???:???:???:???:???:???:???");
+    }
 
     return toReturn;
 
@@ -122,7 +134,9 @@ int submit(bool solvable) {
     int lab7 = rand() % 65536;
     int lab8 = rand() % 65536;
     int lab9 = rand() % 32768*2;
-    printf("Next maze: %d:%d:%d:%d:%d:%d:%d:%d:%d\n", lab1, lab2, lab3, lab4, lab5, lab6, lab7, lab8, lab9);
+    char* s = calloc(100, sizeof(char));
+    sprintf(s,"Next maze: %d:%d:%d:%d:%d:%d:%d:%d:%d", lab1, lab2, lab3, lab4, lab5, lab6, lab7, lab8, lab9);
+    write_terminal(s);
     return 0;
   }
 

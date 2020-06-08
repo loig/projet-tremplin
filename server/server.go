@@ -23,10 +23,10 @@ import (
 // return codes
 const (
 	everythingOk int = iota
+	wrongLab
 	receptionError
 	wrongMessage
 	unknownStudent
-	wrongLab
 )
 
 type student struct {
