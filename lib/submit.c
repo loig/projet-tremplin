@@ -13,7 +13,6 @@ void get_maze_hash(char* hash){
 
   for (int pady = 0; pady < 12; pady += 4) {
     for (int padx = 0; padx < 12; padx += 4) {
-      printf("working on elements[%d]\n", elem);
       elements[elem] = 0;
       for (int y = pady; y < pady + 4; y++) {
         for (int x = padx; x < padx + 4; x++) {
