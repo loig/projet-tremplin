@@ -194,7 +194,7 @@ void analyseOption(int argc, char *argv[]) {
 
   static struct option long_options[] = {
                                         {"speed",    required_argument, 0,  't' }, //change speed
-                                        {"contest",    no_argument, 0,  'u' }, //mode competition
+                                        {"contest",    required_argument, 0,  'u' }, //mode competition
                                         {"start-random",    no_argument, 0,  'w' }, //start set
                                         {"arrival-random",    no_argument, 0,  'x' }, //arrival set
                                         {"start",    required_argument, 0,  'y' }, //start set
@@ -207,6 +207,8 @@ void analyseOption(int argc, char *argv[]) {
 
   parameters.labName = ""; //name of the maze
   parameters.execName = argv[0]; //executable name
+  parameters.userName = ""; //user name, useful only in contest mode
+  parameters.serverAdress = ""; //server adress, useful only in contest mode
   parameters.display = 0; //display
   parameters.resolution = 0; //resolution
   parameters.generation = 0; //generation
@@ -326,10 +328,27 @@ void analyseOption(int argc, char *argv[]) {
       break;
 
     case 'u'://contest
-    parameters.display = 9;
-    parameters.speed = 0;
-    parameters.contest = true;
-    break;
+      parameters.contest = true;
+      int userNameLength = 0;
+      for (int i = 0; optarg[i] != '@'; i++) {
+        userNameLength++;
+        if (optarg[i]=='\0') {
+          printf("Error: For contest mode you must give a server adress\n");
+          display_help();
+          exit(EXIT_FAILURE);
+        }
+      }
+      parameters.userName = calloc(userNameLength + 1, sizeof(char));
+      strncpy(parameters.userName, optarg, userNameLength);
+      parameters.userName[userNameLength] = '\0';
+      if (optarg[userNameLength+1] == '\0') {
+        printf("Error: For contest mode you must give a non empty server adress\n");
+        display_help();
+        exit(EXIT_FAILURE);
+      }
+      parameters.serverAdress = calloc(strlen(optarg) - userNameLength, sizeof(char));
+      strcpy(parameters.serverAdress, &optarg[userNameLength+1]);
+      break;
 
     case 'w'://start-random
       parameters.randomStart = true;
@@ -373,6 +392,12 @@ void analyseOption(int argc, char *argv[]) {
     parameters.arrival.y = val;
       break;
     }
+  }
+
+  if (parameters.contest && parameters.resolution == 3) {
+        printf("Error: Cannot compare algorithms in contest situation\n");
+        display_help();
+        exit(EXIT_FAILURE);
   }
 }
 

@@ -75,6 +75,8 @@ typedef struct maze{
 typedef struct Parameters {
   char* labName;
   char* execName;
+  char* userName;
+  char* serverAdress;
   int display;
   int resolution;
   int generation;
