@@ -119,7 +119,16 @@ int submit(bool solvable) {
     return toReturn;
 
   } else {
-
+    int lab1 = rand() % 32768;
+    int lab2 = rand() % 65536;
+    int lab3 = rand() % 65536;
+    int lab4 = rand() % 65536;
+    int lab5 = rand() % 65536;
+    int lab6 = rand() % 65536;
+    int lab7 = rand() % 65536;
+    int lab8 = rand() % 65536;
+    int lab9 = rand() % 32768*2;
+    printf("Next maze: %d:%d:%d:%d:%d:%d:%d:%d:%d\n", lab1, lab2, lab3, lab4, lab5, lab6, lab7, lab8, lab9);
     return 0;
   }
 
