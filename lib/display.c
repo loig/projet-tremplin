@@ -733,7 +733,7 @@ void write_coord_terminal(){
 void display_dashboard(){
   int yDebutTableauDeBord = 32;
   int xDebutTableauDeBord = 35;
-  mvprintw(yDebutTableauDeBord + 2, xDebutTableauDeBord + 1, "File name :");
+  mvprintw(yDebutTableauDeBord + 2, xDebutTableauDeBord + 1, "File name:");
   int tailleString = 0;
   while (parameters.labName[tailleString] != '\0'){
     tailleString++;
@@ -746,10 +746,10 @@ void display_dashboard(){
   }else{
     mvprintw(yDebutTableauDeBord + 3, xDebutTableauDeBord + 1, "%s", parameters.labName);
   }
-  mvprintw(yDebutTableauDeBord + 5, xDebutTableauDeBord + 1, "Step count :");
+  mvprintw(yDebutTableauDeBord + 5, xDebutTableauDeBord + 1, "Step count:");
   mvprintw(yDebutTableauDeBord + 6, xDebutTableauDeBord + 1, "%d", player.nb_steps);
-  mvprintw(yDebutTableauDeBord + 8, xDebutTableauDeBord + 1, "Time (without delay) :");
-  mvprintw(yDebutTableauDeBord + 9, xDebutTableauDeBord + 1, "%f6 s", (double) (clock()-timeStart)/CLOCKS_PER_SEC);
+  mvprintw(yDebutTableauDeBord + 8, xDebutTableauDeBord + 1, "Time (without delay):");
+  mvprintw(yDebutTableauDeBord + 9, xDebutTableauDeBord + 1, "%f6s", (double) (clock()-timeStart)/CLOCKS_PER_SEC);
 }
 
 /**

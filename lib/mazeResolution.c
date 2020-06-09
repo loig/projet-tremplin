@@ -41,40 +41,24 @@ void lefthand_algorithm() {
 
 
 void pledge_algorithm() {
-  int val;
-  while (!arrival_reached()) {
-    val = rand() %3;
-    switch (val) {
-    case 0:
-      turn_left();
-      if (is_move_forward_possible()) {
-        move_forward();
-      }
-      break;
-    case 1:
-      turn_right();
-      if (is_move_forward_possible()) {
-        move_forward();
-      }
-      break;
-    case 2:
-      if (is_move_forward_possible()) {
-        move_forward();
-      }
-      break;
-    default:
-      if (is_move_forward_possible()) {
-        move_forward();
-      }
-    }
+  write_coord_terminal();
+  while (true) {
+    turn_left();
+    turn_left();
+    move_forward();
+    move_forward();
+    move_forward();
     write_coord_terminal();
   }
 }
 
 void personal_algorithm() {
   write_coord_terminal();
-  turn_left();
-  turn_left();
-  move_forward();
-  write_coord_terminal();
+  while (true) {
+    turn_left();
+    turn_left();
+    move_forward();
+    move_forward();
+    write_coord_terminal();
+  }
 }

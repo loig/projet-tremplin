@@ -60,6 +60,10 @@ bool is_move_forward_possible(){
 * \brief Move the player forward. Do not check if the movement is possible.
 */
 void move_forward(){
+  if(parameters.display != 9){
+    display_maze();
+    display_dashboard();
+  }
   usleep(parameters.speed);
   Coordonnes reached = {player.coordinates.x, player.coordinates.y};
   if (player.orientation == NORTH) {
