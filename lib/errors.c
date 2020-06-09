@@ -3,11 +3,8 @@
 
 void handleFatalError(char* error, bool running, bool displayHelp) {
   if (running && parameters.display != 9) {
-    int len = strlen(error);
-    char* errorForTerminal = calloc(len + 2, sizeof(char));
-    sprintf(errorForTerminal, "%s\n", error);
-    write_terminal(errorForTerminal);
-    write_terminal("Press q to quit.\n");
+    write_terminal(error);
+    write_terminal("Press q to quit.");
     keypad(window, TRUE);
     bool done = false;
     while(!done){

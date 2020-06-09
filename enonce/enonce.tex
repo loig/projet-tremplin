@@ -80,11 +80,14 @@ Si vous arrivez à lire ce sujet c’est que vous avez réussi à accéder à vo
 
 Le \textbf{Webmail} est l’un des outils numériques mis à disposition par l’Université de Nantes et accessible à partir de votre espace personnel. D’autres outils vous seront utiles tout au long de votre cursus universitaire comme \textbf{UNCloud}, qui permet le transfert de fichiers, ou plus encore \textbf{Madoc}, qui est une plate-forme pédagogique.
 
-Vous pouvez maintenant vous connecter sur Madoc, à partir de votre espace personnel, et chercher le cours \textbf{Projet Tremplin INFO1 (M0001)} pour récupérer l'archive qui s'y trouve. Elle contient un \emph{fichier source C}, un \emph{fichier d'entête C}, un \emph{fichier objet}, un \emph{fichier exécutable} et un fichier décrivant un labyrinthe. Ces éléments vont nous permettre de commencer un peu à travailler.
-
 \begin{enseignants}{Madoc~:}
   Montrer comment accéder à un cours sur Madoc, comment récupérer un fichier, comment ouvrir l'archive.
 \end{enseignants}
+
+Vous pouvez maintenant vous connecter sur Madoc, à partir de votre espace personnel, et chercher le cours \textbf{Projet Tremplin INFO1 (M0001)} pour récupérer l'archive qui s'y trouve. Elle contient un \emph{fichier source C}, un \emph{fichier d'entête C}, un \emph{fichier objet}, un \emph{fichier exécutable} et un fichier décrivant un labyrinthe. Ces éléments vont nous permettre de commencer un peu à travailler.
+
+Dans un premier temps, vous allez simplement compiler le programme C, puis lui faire afficher le labyrinthe qui vous est fourni.
+Vous chercherez ensuite un chemin pour sortir du labyrinthe.
 
 \begin{enseignants}{}
   Expliquer aux étudiants que le fichier de labyrinthe représente un labyrinthe dans un format textuel (ne pas rentrer dans les détails, ceci sera abordé plus tard).
@@ -121,6 +124,9 @@ Pour cela, il va falloir indiquer dans le fichier \texttt{mazeResolution.c} le c
 
 \begin{enseignants}
   Présentation de la structure du programme C, présentation des fonctions disponibles et des variables. Écrire au vidéo projecteur, avec les étudiants, en dur le chemin identifié à la main.
+  Le faire dans la fonction \verb|personal_algorithm()|.
+  Utiliser ensuite le programme avec l'option \verb|-a 2| pour que ce soit la fonction \verb|personal_algorithm()| qui soit utilisée pour résoudre les labyrinthes.
+  On devrait aussi utiliser l'option \verb|--speed 500| (par exemple) pour que les déplacements ne soient pas instantanés.
 \end{enseignants}
 
 
@@ -231,7 +237,7 @@ Notons $t$ (comme \emph{turn}) un compteur. Cet algorithme fonctionne de la faç
 \begin{enseignants}{Sur l'algorithme de Pledge~:}
   Le faire tourner à la main avant tout.
   Et, comme d'habitude, l'implémenter au vidéo projecteur avec les étudiants plutôt que leur laisser faire ça seuls.
-  Se demander si ça fonctionne toujours (réponse~: non, prendre par exemple le labyrinthe \verb|third_lab.fodaly|, en fait ça fonctionne pour n'importe quel point de départ à condition que l'arrivée soit sur un mur extérieur).
+  Se demander si ça fonctionne toujours (réponse~: non, prendre par exemple le labyrinthe \verb|g.fodaly|, en fait ça fonctionne pour n'importe quel point de départ à condition que l'arrivée soit sur un mur extérieur).
 \end{enseignants}
 
 Pour faire quelques tests vous pourrez trouver d'autres labyrinthes sur le serveur où vous avez récupéré le dernier exemple.
