@@ -562,7 +562,7 @@ void maze_initialization() {
   if (!parameters.contest) {
     if (parameters.randomStart) {
       random_start();
-    } else if (parameters.start.x > 0 && parameters.start.y > 0) {
+    } else if (parameters.start.x >= 0 && parameters.start.y >= 0) {
       set_start_lab(parameters.start);
     } else {
       //set the default start
@@ -572,7 +572,7 @@ void maze_initialization() {
 
     if (parameters.randomArrival) {
       random_arrival();
-    } else if (parameters.arrival.x > 0 && parameters.arrival.y > 0) {
+    } else if (parameters.arrival.x >= 0 && parameters.arrival.y >= 0) {
       set_arrival_lab(parameters.arrival);
     } else {
       //set the default arrival
