@@ -391,11 +391,14 @@ void analyseOption(int argc, char *argv[]) {
 */
 void keyboard_solve(WINDOW* window){
   while(!arrival_reached()){
+    bool moved = false;
     int c = wgetch(window);
     switch(c){
     case KEY_UP:
-      if(is_move_forward_possible())
+      if(is_move_forward_possible()) {
         move_forward();
+        moved = true;
+      }
       break;
     case KEY_LEFT:
       turn_left();
@@ -407,7 +410,18 @@ void keyboard_solve(WINDOW* window){
       return;
       break;
     }
+    if (moved) {
       write_coord_terminal();
+    }
+  }
+  while(true) {
+    write_terminal("Arrival reached! Press q to quit.");
+    int c = wgetch(window);
+    switch(c){
+    case 'q':
+      return;
+      break;
+    }
   }
 }
 
