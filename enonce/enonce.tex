@@ -434,5 +434,49 @@ Pour chacun des labyrinthes construits utiliser les algorithmes implantés les j
 % Rappel des objectifs du jeudi :
 %   compétition entre les étudiants, c'est à celui qui résoudra le plus de labyrinthes en un temps donné
 
+\section{Pour aller plus loin}
+
+Vous avez peut-être remarqué, parmi les fonctions décrites dans le fichier \verb|labs.h|, une fonction \verb|submit|. Cette fonction vous sera utile jeudi matin, lors d'un petit concours de résolution de labyrinthes qui aura lieu entre vous.
+
+Le principe de ce concours sera le suivant : vous résoudrez des labyrinthes à la chaîne, en essayant d'en résoudre le plus possible en un temps imparti. Pour que nous puissions compter combien de labyrinthes vous aurez résolus, vous communiquerez vos résultats à un serveur au moyen de la fonction \verb|submit|.
+
+Plus précisément, vous commencerez par résoudre le labyrinthe très simple de la Figure~\ref{fig:conteststart} (gauche). C'est-à-dire que vous ferez en sorte de placer le joueur à l'arrivée, puis vous appellerez la fonction \verb|submit(true)|.
+
+\begin{figure}[htbp]
+  \centering
+\begin{tabular}{|c|c|c|}
+  \hline
+  0 & 0 & 0 \\
+  \hline
+  0 & 0 & 0 \\
+  \hline
+  0 & 0 & 0 \\
+  \hline
+\end{tabular}
+\hspace{2.5cm}
+\begin{tabular}{|c|c|c|}
+  \hline
+  A & B & C \\
+  \hline
+  D & E & F \\
+  \hline
+  G & H & I \\
+  \hline
+\end{tabular}
+\caption{Premier labyrinthe à résoudre (gauche) et schéma général des labyrinthes suivants (droite).}\label{fig:conteststart}
+\end{figure}
+
+Quand ceci sera fait, un nouveau labyrinthe à résoudre s'affichera dans le terminal (c'est la fonction \verb|submit| qui est responsable de cet affichage) sous la forme \verb|A:B:C:D:E:F:G:H:I|, correspondant à la figure~\ref{fig:conteststart} (droite).
+Vous résoudrez de la même façon ce labyrinthe, un autre vous sera proposé, et ainsi de suite.
+
+{\bf Quelques remarques importantes~:}
+\begin{itemize}
+  \item Vous pouvez tester la fonction \verb|submit| dès maintenant en mode hors ligne (sans accès au serveur, qui n'est pas encore mis en place). Par défaut elle simule l'existence d'un serveur. Pour l'utiliser en conditions réelles il faudra utiliser l'option \verb|--contest name@server| en lançant votre programme (\verb|name| est votre numéro d'étudiant et \verb|server| est l'adresse du serveur, qui vous sera communiquée plus tard).
+  \item La fonction \verb|submit| vous informe des résultats obtenus par le serveur à l'aide d'une valeur de retour. Il faut tester cette valeur dans votre code, elle peut vous informer que quelque chose s'est mal passé. Les détails sont dans le fichier \verb|labs.h|.
+  \item C'est le serveur qui vérifie que vous avez résolu le bon labyrinthe et que vous êtes bien arrivé au bout. Par conséquent, en mode hors ligne, il n'est pas vérifié si vous avez résolu le bon labyrinthe ou si vous avez bien résolu votre labyrinthe. La fonction \verb|submit| retournera donc toujours 0 en mode hors ligne.
+  \item En utilisant l'option \verb|--contest| le point de départ est toujours en $(0,0)$ et l'arrivée en $(11,11)$.
+  \item La fonction submit prend un argument, qui doit valoir \verb|true| quand il existe un chemin entre le départ et l'arrivée dans le labyrinthe et \verb|false| quand ce n'est pas le cas (et dans ce deuxième cas, peu importe la position du joueur, puisqu'il n'est pas possible d'arriver au bout).
+\end{itemize}
+
 \end{document}
 \grid

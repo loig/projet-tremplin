@@ -24,9 +24,9 @@ import (
 const (
 	everythingOk int = iota
 	wrongLab
+	unknownStudent
 	receptionError
 	wrongMessage
-	unknownStudent
 )
 
 type student struct {

@@ -42,5 +42,16 @@ void write_coord_terminal();
 // terminal.
 void write_terminal(char* s);
 
-// to be explained later
+// submit sends a result to the contest server.
+// The solvable value must tell whether or not
+// there exist a solution to the current maze.
+// The return value of submit indicates the server
+// answer to the submission:
+//    0: everything went well
+//    1: the maze that has been solved is not the one the server asked for
+//    2: the student number used is not known by the server
+//    >2: internal server errors, please contact a teacher
+// The submit function also displays the next
+// maze that should be solved on standard output
+// (only when the return value is 0 or 1)
 int submit(bool solvable);
