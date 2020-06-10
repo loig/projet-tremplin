@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -16,9 +18,7 @@ import (
 // TODO:
 // * enregistrer régulièrement
 // * pouvoir démarrer du dernier enregistrement
-// * définir le prochain labyrinthe à résoudre
 // * récupérer stats : temps, nb mouvements
-// * réponse du serveur à l'étudiant qui soumet un message
 
 // return codes
 const (
@@ -38,23 +38,26 @@ type student struct {
 var students map[string]student
 var studentsMutex sync.Mutex
 var isFresh bool
+var updatesLogger *log.Logger
 
 const (
 	firstLab = "0:0:0:0:0:0:0:0:0"
 	seed     = 0
+	logfile  = "updates.log"
 )
 
 func init() {
 
+	// random generator
+	log.Print("Initializing random generator")
 	rand.Seed(seed)
 
-	log.Print("Error codes are ", everythingOk, ", ", receptionError, ", ", wrongMessage, ", ", unknownStudent, ", ", wrongLab)
-
+	// command line reading
+	log.Print("Initializing command line analysis")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [-new|-h] studentsList\n", os.Args[0])
 		flag.PrintDefaults()
 	}
-
 	flag.BoolVar(&isFresh, "new", false, "Start a fresh server. If this option is not set, the server starts from the last save.")
 }
 
@@ -69,11 +72,26 @@ func main() {
 	}
 
 	students = make(map[string]student)
+	// initialize the students map
+	initializeStudentsMapFromFile(flag.Args()[0])
+	// logging of students map updates
 	if isFresh {
-		// initialize the students map
-		initializeStudentsMapFromFile(flag.Args()[0])
+		log.Print("Initializing new log file")
+		logfileWriter, err := os.OpenFile(logfile, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0777)
+		if err != nil {
+			log.Fatal("Cannot create log file (", logfile, ")")
+		}
+		updatesLogger = log.New(logfileWriter, "", 0)
 	} else {
 		// populate the students map
+		populateStudentsMapFromLog()
+		// open log file in append mode
+		log.Print("Opening log file")
+		logfileWriter, err := os.OpenFile(logfile, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0777)
+		if err != nil {
+			log.Fatal("Cannot open log file (", logfile, ")")
+		}
+		updatesLogger = log.New(logfileWriter, "", 0)
 	}
 
 	// start the server
@@ -160,6 +178,7 @@ func handleConnexion(conn net.Conn) {
 
 	// update the students map
 	studentsMutex.Lock()
+	updatesLogger.Print(studentID, ":::", studentInfo.labHash, ":::", studentInfo.numSolved, ":::", studentInfo.numTried)
 	students[studentID] = studentInfo
 	studentsMutex.Unlock()
 
@@ -186,6 +205,50 @@ func initializeStudentsMapFromFile(fileName string) {
 		}
 	}
 	log.Print("Ending students map initialization")
+}
+
+// read the log file to restore the content
+// of the students map
+func populateStudentsMapFromLog() {
+	log.Print("Restoring students map from log file (", logfile, ")")
+	defer log.Print("Students map restoration finished")
+
+	logFileReader, err := os.Open(logfile)
+	if err != nil {
+		log.Fatal("Cannot read log file (", logfile, ")")
+	}
+	bufReader := bufio.NewReader(logFileReader)
+	for line, err := bufReader.ReadString('\n'); err != io.EOF; line, err = bufReader.ReadString('\n') {
+		line = strings.Trim(line, "\r\n")
+		splitLine := strings.Split(line, ":::")
+		if len(splitLine) != 4 {
+			log.Print("Ignoring a line (wrong size): ", line)
+			continue
+		}
+		studentID := splitLine[0]
+		studentInfo, found := students[studentID]
+		if !found {
+			log.Print("Ignoring a line (unknown student): ", line)
+			continue
+		}
+		nextHash := splitLine[1]
+		numSolved, err := strconv.Atoi(splitLine[2])
+		if err != nil {
+			log.Print("Ignoring a line (numSolved cannot be read): ", line)
+			continue
+		}
+		numTried, err := strconv.Atoi(splitLine[3])
+		if err != nil {
+			log.Print("Ignoring a line (numTried cannot be read): ", line)
+			continue
+		}
+		if studentInfo.numTried < numTried {
+			studentInfo.numTried = numTried
+			studentInfo.numSolved = numSolved
+			studentInfo.labHash = nextHash
+			students[studentID] = studentInfo
+		}
+	}
 }
 
 // create a new student from her name
