@@ -415,7 +415,8 @@ void keyboard_solve(WINDOW* window){
     }
   }
   while(true) {
-    write_terminal("Arrival reached! Press q to quit.");
+    write_terminal("Arrival reached!");
+    write_terminal("Press q to quit");
     int c = wgetch(window);
     switch(c){
     case 'q':
@@ -431,6 +432,7 @@ void keyboard_solve(WINDOW* window){
 */
 void historic(WINDOW* window) {
   if (parameters.display != 9 && parameters.resolution != 9){
+    write_terminal("Press q to quit");
     int cmp = 0;
     bool choice = false;
     int max = get_size_list_terminal()-1;

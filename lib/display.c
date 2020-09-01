@@ -768,8 +768,8 @@ void displayInitialization () {
     curs_set(0);
     if (LINES < 45 || COLS < 94){
       endwin();
-      char* s = calloc(100, sizeof(char));
-      sprintf(s, "The terminal window is not large enough to have a correct display. Please enlarge it, please.\nCurrent size: %d lines, %d columns. Minimum size required: 45 lines, 94 columns.", LINES, COLS);
+      char* s = calloc(1000, sizeof(char));
+      sprintf(s, "The terminal window is not large enough to have a correct display. Please enlarge it.\nCurrent size: %d lines, %d columns. Minimum size required: 45 lines, 94 columns.", LINES, COLS);
       handleFatalError(s, false, false);
     }
 

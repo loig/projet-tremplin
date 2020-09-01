@@ -29,8 +29,8 @@
 
 % Choisir de compiler la version enseignant ou étudiant
 \newif\ifenseignant
-\enseignanttrue % version enseignant
-%\enseignantfalse % version étudiant
+%\enseignanttrue % version enseignant
+\enseignantfalse % version étudiant
 % Pour les choses qui ne doivent apparaître que dans la version enseignants du sujet
 \ifenseignant
 \newenvironment{enseignants}[1]{\noindent\color{blue}{\bf #1}}{}
@@ -49,7 +49,7 @@ construire et explorer des labyrinthes}
 
 \maketitle
 
-\section{Lundi}
+\section{Mardi}
 
 \begin{objectif}
   Prise en main de l’environnement numérique de l'IUT et écriture d'un premier programme C de parcours d'un labyrinthe.
@@ -78,7 +78,7 @@ Si vous arrivez à lire ce sujet c’est que vous avez réussi à accéder à vo
 
 \subsection{Outils numériques}
 
-Le \textbf{Webmail} est l’un des outils numériques mis à disposition par l’Université de Nantes et accessible à partir de votre espace personnel. D’autres outils vous seront utiles tout au long de votre cursus universitaire comme \textbf{UNCloud}, qui permet le transfert de fichiers, ou plus encore \textbf{Madoc}, qui est une plate-forme pédagogique.
+Le \textbf{Webmail} est l’un des outils numériques mis à disposition par l’Université de Nantes et accessible à partir de votre espace personnel. D’autres outils vous seront utiles tout au long de votre cursus universitaire comme \textbf{UNCloud}, qui permet le stockage et le partage de documents en ligne, ou plus encore \textbf{Madoc}, qui est une plate-forme pédagogique.
 
 \begin{enseignants}{Madoc~:}
   Montrer comment accéder à un cours sur Madoc, comment récupérer un fichier, comment ouvrir l'archive.
@@ -100,6 +100,13 @@ Vous chercherez ensuite un chemin pour sortir du labyrinthe.
   \verb|./monProgramme -a 9 firstLab.fodaly|
 
   Puis demander aux étudiants de rechercher un chemin à la main sur le labyrinthe qui s'est affiché et de relever les coordonnées (si on a bien utilisé l'option \verb|-a 9| ci-dessus, on peut le faire au clavier directement dans l'interface du programme).
+  Les commandes au clavier sont :
+  \begin{itemize}
+    \item flèche du haut pour avant tout droit (la case représentant le joueur indique aussi sa direction, initialement vers le haut)
+    \item flèche de gauche pour faire un quart de tour à gauche
+    \item flèche de droite pour faire un quart de tour à droite
+    \item q pour quitter
+  \end{itemize}
 \end{enseignants}
 
 \subsection{Manipulation de fichiers en ligne de commande}
@@ -123,7 +130,7 @@ Pour cela, il va falloir indiquer dans le fichier \texttt{mazeResolution.c} le c
 %La compilation de votre programme en C, qui permet de transformer votre programme en code machine compréhensible par l’ordinateur, se fera avec la commande XXX. Vous pouvez maintenant exécuter votre programme avec la commande YYY.
 
 \begin{enseignants}
-  Présentation de la structure du programme C, présentation des fonctions disponibles et des variables. Écrire au vidéo projecteur, avec les étudiants, en dur le chemin identifié à la main.
+  Présentation de la structure d'un programme C, présentation des fonctions disponibles dans \verb|labs.h|. Écrire au vidéo projecteur, avec les étudiants, en dur le chemin identifié à la main.
   Le faire dans la fonction \verb|personal_algorithm()|.
   Utiliser ensuite le programme avec l'option \verb|-a 2| pour que ce soit la fonction \verb|personal_algorithm()| qui soit utilisée pour résoudre les labyrinthes.
   On devrait aussi utiliser l'option \verb|--speed 500| (par exemple) pour que les déplacements ne soient pas instantanés.
@@ -148,7 +155,7 @@ Pour cela, il va falloir indiquer dans le fichier \texttt{mazeResolution.c} le c
 %   Implantation d'une marche aléatoire
 
 
-\section{Mardi}
+\section{Mercredi}
 
 \begin{objectif}
   Étude et mise en \oe{}uvre de différentes stratégies pour sortir d’un labyrinthe.
@@ -180,7 +187,7 @@ Une stratégie classique pour sortir d’un labyrinthe, connue sous le nom de pa
 Pour mieux comprendre cette stratégie, nous vous invitons à reprendre votre premier labyrinthe et à représenter le chemin parcouru avec la stratégie de la main gauche. C’est compris ? \`A vous alors de programmer maintenant cette stratégie dans le fichier \texttt{mazeResolution.c} et de l’évaluer avec votre premier labyrinthe (vous pourrez essayer plusieurs points de départ et d'arrivée).
 
 \begin{enseignants}{De l'aide~:}
-Les étudiants auront besoin d'aide. Le mieux est probablement de programmer au vidéo projecteur tous ensemble. Notez que l'orientation (nécessaire pour savoir sur quel mur est la main gauche) est à définir soit même (arbitrairement pour l'orientation initiale) et à stocker dans une variable qui sera mise à jour à chaque déplacement ou rotation.
+Les étudiants auront besoin d'aide. Le mieux est probablement de programmer au vidéo projecteur tous ensemble.
 \end{enseignants}
 
 \begin{enseignants}{Réflexion à avoir avec les étudiants une fois l'implantation de la stratégie de la main gauche terminée~:}
@@ -268,7 +275,7 @@ Testez vos implantations de la stratégie de la main gauche et de l'algorithme d
 % Idées pour aller plus loin :
 %   Constater que Pledge fonctionne dans le noir (i.e. sans connaître la position de départ)
 
-\section{Mercredi}
+\section{Jeudi}
 
 \begin{objectif}
   Construction de labyrinthes à partir de plusieurs fichiers.
@@ -436,7 +443,7 @@ Pour chacun des labyrinthes construits utiliser les algorithmes implantés les j
 
 \section{Pour aller plus loin}
 
-Vous avez peut-être remarqué, parmi les fonctions décrites dans le fichier \verb|labs.h|, une fonction \verb|submit|. Cette fonction vous sera utile jeudi matin, lors d'un petit concours de résolution de labyrinthes qui aura lieu entre vous.
+Vous avez peut-être remarqué, parmi les fonctions décrites dans le fichier \verb|labs.h|, une fonction \verb|submit|. Cette fonction vous sera utile vendredi matin, lors d'un petit concours de résolution de labyrinthes qui aura lieu entre vous.
 
 Le principe de ce concours sera le suivant : vous résoudrez des labyrinthes à la chaîne, en essayant d'en résoudre le plus possible en un temps imparti. Pour que nous puissions compter combien de labyrinthes vous aurez résolus, vous communiquerez vos résultats à un serveur au moyen de la fonction \verb|submit|.
 
