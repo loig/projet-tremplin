@@ -5,6 +5,12 @@
 *.fls
 *.synctex.gz
 *.log
+*.nav
+*.out
+*.snm
+*.tex~
+*.toc
+*.vrb
 ProjetTremplin
 etu/*
 project/*
