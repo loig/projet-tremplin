@@ -12,6 +12,8 @@
 *.toc
 *.vrb
 ProjetTremplin
+generator
+spliter
 etu/*
 project/*
 server/students
